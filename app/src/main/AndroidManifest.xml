@@ -20,9 +20,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SingleActivity"
-            android:label="@string/title_activity_single"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:name=".java.ASingleActivity"/>
+        <activity
+            android:name=".kotlin.ASingleActivity"/>
     </application>
 
 </manifest>
