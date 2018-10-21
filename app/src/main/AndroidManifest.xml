@@ -18,10 +18,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".java.ASingleActivity" />
+        <activity android:name=".java.CSimpleOperatorsActivity" />
         <activity
-            android:name=".java.ASingleActivity"/>
-        <activity
-            android:name=".java.CSimpleOperatorsActivity"/>
+            android:name=".java.sample.ButtonClickActivity"
+            android:label="@string/title_activity_button_click"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

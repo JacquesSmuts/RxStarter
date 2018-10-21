@@ -5,12 +5,11 @@ import android.support.v7.app.AppCompatActivity
 import com.jacquessmuts.rxstarter.java.ASingleActivity
 import com.jacquessmuts.rxstarter.java.BaseActivity
 import com.jacquessmuts.rxstarter.java.CSimpleOperatorsActivity
+import com.jacquessmuts.rxstarter.java.sample.ButtonClickActivity
 import com.jacquessmuts.rxstarter.kotlin.subscribeAndLogE
 import com.jacquessmuts.rxstarter.models.ActivityIntent
 import com.jacquessmuts.rxstarter.models.getIntent
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : BaseActivity() {
 
@@ -18,7 +17,8 @@ class MainActivity : BaseActivity() {
     companion object {
         val CLICKABLE_ACTIVITIES = listOf(
                 ASingleActivity::class.java,
-                CSimpleOperatorsActivity::class.java)
+                CSimpleOperatorsActivity::class.java,
+                ButtonClickActivity::class.java)
     }
     lateinit var adapter: ActivityAdapter
 
