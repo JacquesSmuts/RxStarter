@@ -39,17 +39,19 @@ class MainActivity : BaseActivity() {
         adapter = ActivityAdapter(activityClickedPublisher)
         adapter.activities = getListOfClickableActivities()
         recyclerView.adapter = adapter
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         rxSubs.add(activityClickedPublisher
                 .subscribeAndLogE { activityIntent ->
                     startActivity(activityIntent.getIntent(this))
                 })
-
-
     }
 
     fun getListOfClickableActivities(): List<ActivityIntent<out AppCompatActivity>> {
-        
+
         val intentList = mutableListOf<ActivityIntent<out AppCompatActivity>>()
         CLICKABLE_ACTIVITIES.forEach {
             intentList.add(ActivityIntent(it))

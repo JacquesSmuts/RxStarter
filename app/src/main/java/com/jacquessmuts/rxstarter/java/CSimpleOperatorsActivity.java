@@ -56,7 +56,9 @@ public class CSimpleOperatorsActivity extends BaseActivity {
     protected void onDestroy() {
 
         //dispose of all your Subscriptions in onDestroy, always
-        singleDisposable.dispose();
+        if (singleDisposable != null) {
+            singleDisposable.dispose();
+        }
 
         super.onDestroy();
     }
