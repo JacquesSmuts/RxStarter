@@ -1,39 +1,61 @@
 package com.jacquessmuts.rxstarter
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
-
+import com.jacquessmuts.rxstarter.java.ASingleActivity
+import com.jacquessmuts.rxstarter.java.BaseActivity
+import com.jacquessmuts.rxstarter.java.CSimpleOperatorsActivity
+import com.jacquessmuts.rxstarter.kotlin.subscribeAndLogE
+import com.jacquessmuts.rxstarter.models.ActivityIntent
+import com.jacquessmuts.rxstarter.models.getIntent
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
+
+
+    companion object {
+        val CLICKABLE_ACTIVITIES = listOf(
+                ASingleActivity::class.java,
+                CSimpleOperatorsActivity::class.java)
+    }
+    lateinit var adapter: ActivityAdapter
+
+    private val activityClickedPublisher: PublishSubject<ActivityIntent<out AppCompatActivity>> by lazy {
+        PublishSubject.create<ActivityIntent<out AppCompatActivity>>()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
+        setupAdapter()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
+    fun setupAdapter(){
+
+        adapter = ActivityAdapter(activityClickedPublisher)
+        adapter.activities = getListOfClickableActivities()
+        recyclerView.adapter = adapter
+
+        rxSubs.add(activityClickedPublisher
+                .subscribeAndLogE { activityIntent ->
+                    startActivity(activityIntent.getIntent(this))
+                })
+
+
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
+    fun getListOfClickableActivities(): List<ActivityIntent<out AppCompatActivity>> {
+        
+        val intentList = mutableListOf<ActivityIntent<out AppCompatActivity>>()
+        CLICKABLE_ACTIVITIES.forEach {
+            intentList.add(ActivityIntent(it))
         }
+
+        return intentList
     }
+
 }
