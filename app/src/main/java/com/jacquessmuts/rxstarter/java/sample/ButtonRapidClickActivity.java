@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import timber.log.Timber;
 
-public class ButtonClickActivity extends BaseActivity {
+public class ButtonRapidClickActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
