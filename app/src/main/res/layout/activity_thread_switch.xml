@@ -77,13 +77,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
-            android:text="The .throttleFirst() function filters out any clicks that comes out faster than once per 2000ms. \n\nThe .scan() function keeps a running tally of all emissions that make it past the filter."
+            android:text="The No Threading button keeps everything on the same thread, which locks things up if the process takes long. \n\nThe good threading button uses 'observeOn(Schedulers.computation())' to put the long-running process on a separate thread, and 'observeOn(AndroidSchedulers.mainThread())' to put it back on the ui thread."
             android:textAlignment="textStart"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button" />
+            app:layout_constraintTop_toBottomOf="@+id/buttonGoodThreading" />
 
 
     </android.support.constraint.ConstraintLayout>
