@@ -1,11 +1,11 @@
 package com.jacquessmuts.rxstarter
 
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import com.jacquessmuts.rxstarter.models.ActivityIntent
 import com.jacquessmuts.rxstarter.models.getName
 import com.jakewharton.rxbinding2.view.RxView
@@ -49,7 +49,7 @@ class ActivityAdapter(private val activityClickPublisher: PublishSubject<Activit
             }
         }
 
-        val clickView: LinearLayout by lazy {
+        val clickView: CardView by lazy {
             itemView.layout_holder
         }
 
