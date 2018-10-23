@@ -2,10 +2,9 @@ package com.jacquessmuts.rxstarter
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.jacquessmuts.rxstarter.java.ASingleActivity
 import com.jacquessmuts.rxstarter.java.BaseActivity
-import com.jacquessmuts.rxstarter.java.CSimpleOperatorsActivity
 import com.jacquessmuts.rxstarter.java.sample.ButtonRapidClickActivity
+import com.jacquessmuts.rxstarter.java.sample.LongLoadingActivity
 import com.jacquessmuts.rxstarter.java.sample.ThreadSwitchActivity
 import com.jacquessmuts.rxstarter.kotlin.subscribeAndLogE
 import com.jacquessmuts.rxstarter.models.ActivityIntent
@@ -18,10 +17,9 @@ class MainActivity : BaseActivity() {
 
     companion object {
         val CLICKABLE_ACTIVITIES = listOf(
-                ASingleActivity::class.java,
-                CSimpleOperatorsActivity::class.java,
                 ButtonRapidClickActivity::class.java,
-                ThreadSwitchActivity::class.java)
+                ThreadSwitchActivity::class.java,
+                LongLoadingActivity::class.java)
     }
     lateinit var adapter: ActivityAdapter
 

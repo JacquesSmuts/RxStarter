@@ -23,6 +23,7 @@
         <activity android:name=".java.CSimpleOperatorsActivity" />
         <activity android:name=".java.sample.ButtonRapidClickActivity"/>
         <activity android:name=".java.sample.ThreadSwitchActivity"/>
+        <activity android:name=".java.sample.LongLoadingActivity"/>
     </application>
 
 </manifest>

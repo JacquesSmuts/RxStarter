@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
-            android:text="The .throttleFirst() function filters out any clicks that comes out faster than once per 2000ms. \n\nThe .scan() function keeps a running tally of all emissions that make it past the filter."
+            android:text="@string/explanation_button_click"
             android:textAlignment="textStart"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
