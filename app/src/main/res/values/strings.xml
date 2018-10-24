@@ -3,9 +3,10 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_single">SingleActivity</string>
     <string name="title_activity_button_click">ButtonClickActivity</string>
-    <string name="explanation_button_click">The .throttleFirst() function filters out any clicks that comes out faster than once per 2000ms.   The .scan() function keeps a running tally of all emissions that make it past the filter.</string>
+    <string name="explanation_button_click">The .throttleFirst() function filters out any clicks that comes out faster than once per second.   The .scan() function keeps a running tally of all emissions that make it past the filter.</string>
     <string name="explanation_thread_switch">The No Threading button keeps everything on the same thread, which locks things up if the process takes long.   The good threading button uses \'observeOn(Schedulers.computation())\' to put the long-running process on a separate thread, and \'observeOn(AndroidSchedulers.mainThread())\' to put it back on the ui thread.</string>
-    <string name="explanation_long_load">The ".doOnRetry()" function updates the textview every time there\'s a timeout error. \n\n The ".retryWhen()" function restarts the api call if there is a timeoutError.</string>
+    <string name="explanation_failing_api">The ".doOnRetry()" function updates the textview every time there\'s a timeout error. \n\n The ".retryWhen()" function restarts the api call if there is a timeoutError.</string>
+    <string name="explanation_long_load">One Rx Stream does a long api call that takes 4–40 seconds.\n\nThe other stream emits a random number every 3 seconds and sets a loading text based on that.</string>
 
 
     <string-array name="loading_messages">

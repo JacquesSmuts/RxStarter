@@ -4,7 +4,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.jacquessmuts.rxstarter.java.BaseActivity
 import com.jacquessmuts.rxstarter.java.sample.ButtonRapidClickActivity
-import com.jacquessmuts.rxstarter.java.sample.LongLoadingActivity
+import com.jacquessmuts.rxstarter.java.sample.FailingApiCallActivity
+import com.jacquessmuts.rxstarter.java.sample.LongApiCallActivity
 import com.jacquessmuts.rxstarter.java.sample.ThreadSwitchActivity
 import com.jacquessmuts.rxstarter.kotlin.subscribeAndLogE
 import com.jacquessmuts.rxstarter.models.ActivityIntent
@@ -19,7 +20,8 @@ class MainActivity : BaseActivity() {
         val CLICKABLE_ACTIVITIES = listOf(
                 ButtonRapidClickActivity::class.java,
                 ThreadSwitchActivity::class.java,
-                LongLoadingActivity::class.java)
+                FailingApiCallActivity::class.java,
+                LongApiCallActivity::class.java)
     }
     lateinit var adapter: ActivityAdapter
 

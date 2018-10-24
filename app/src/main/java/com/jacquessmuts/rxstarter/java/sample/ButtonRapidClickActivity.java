@@ -30,7 +30,7 @@ public class ButtonRapidClickActivity extends BaseActivity {
         TextView textViewExplanation = findViewById(R.id.textViewExplanation);
 
         rxSubs.add(RxView.clicks(button) //get clicks
-                .throttleFirst(2000, TimeUnit.MILLISECONDS) //only once per 500ms
+                .throttleFirst(1000, TimeUnit.MILLISECONDS) //only once per 1000ms
                 .map( input -> 1) //emit clicks as 1
                 .scan((total, nuValue) -> total + nuValue) //keep a running tally.
                 .subscribe( tally -> {

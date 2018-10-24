@@ -10,14 +10,15 @@ import com.jacquessmuts.rxstarter.R;
 import com.jacquessmuts.rxstarter.java.BaseActivity;
 import com.jakewharton.rxbinding2.view.RxView;
 
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class LongLoadingActivity extends BaseActivity {
+public class LongApiCallActivity extends BaseActivity {
 
     private boolean apiCallOngoing = false;
 
@@ -34,15 +35,12 @@ public class LongLoadingActivity extends BaseActivity {
         Button button = findViewById(R.id.button);
 
         TextView textViewExplanation = findViewById(R.id.textViewExplanation);
+        textViewExplanation.setText(R.string.explanation_long_load);
 
-        //merge both buttons's emissions and tally the total number of clicks between them both
         rxSubs.add(RxView.clicks(button)
-                .map(input -> 1).scan((total, nuValue) -> total + nuValue) //keep a running tally.
                 .subscribe( tally -> {
                     doApiCall();
-                    if (tally > 1){
-                        textViewExplanation.setVisibility(View.VISIBLE);
-                    }
+                    textViewExplanation.setVisibility(View.VISIBLE);
                 }, Timber::e));
 
     }
@@ -60,22 +58,29 @@ public class LongLoadingActivity extends BaseActivity {
         progressBar.setVisibility(View.VISIBLE);
         textView.setText("");
 
+        //intervalDisposable sets Random Text every 3 seconds, forever.
+        Disposable intervalDisposable = Observable.interval(3, 3, TimeUnit.SECONDS)
+                .map(input -> getRandomNumber()) //get a random number
+                .subscribe(randomNumber -> {
+                    setRandomText(randomNumber); //uses random number to choose a message. Can be replaced with method call.
+                 }, Timber::e);
+
+        //The timer will stop once rxSubs gets cleared in [BaseActivity]'s onPause method.
+        rxSubs.add(intervalDisposable);
+
         //if you add the api call to an rxSub disposable, the api call's result will be ignored if the activity closes
         rxSubs.add(Observable.just(true)
                 .observeOn(Schedulers.computation())
-                .map(input -> getRandomNumberSlowly()) //do the slow api call which could fail
+                .map(input -> getRandomNumberSlowly()) //do the slow api call.
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(error -> {
-                    if (error instanceof TimeoutException){
-                        setRandomText();
-                    } else {
-                        finishWithMessage(error.getLocalizedMessage());
-                    }
-                })
-                .retryWhen( error -> error.flatMap(this::checkResponseType) ) //retry the api call if the error is the right type
                 .subscribe( result -> {
-                    finishWithMessage("SUCCESS");
-                }, Timber::e));
+                    finishWithMessage("SUCCESS! Result = " + result);
+                    intervalDisposable.dispose(); //stop the interval by disposing of it
+                }, error -> {
+                    Timber.e(error);
+                    intervalDisposable.dispose(); //stop the interval by disposing of it
+                }));
+
     }
 
     private void finishWithMessage(String message) {
@@ -86,44 +91,30 @@ public class LongLoadingActivity extends BaseActivity {
         textView.setText(message);
     }
 
-    private void setRandomText(){
+    private void setRandomText(int number){
         TextView textView = findViewById(R.id.textView);
 
         String[] messages = getResources().getStringArray(R.array.loading_messages);
-        textView.setText(messages[getRandomNumber()]);
+        textView.setText(messages[number]);
     }
 
 
     /**
-     * Returns a random number from 1-10, after a 1500 miillisecond wait.
+     * Returns a random number from 1-10, after 4-40 seconds
      * Simulates an api call which keeps failing
      * @return a random int or throws an exception
      */
-    private int getRandomNumberSlowly() throws TimeoutException, UnsupportedOperationException {
+    private int getRandomNumberSlowly() throws UnsupportedOperationException {
         try {
-
-            Thread.sleep(getRandomNumber()*1000);
+            Thread.sleep(getRandomNumber()*4000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        int number = getRandomNumber();
-        if (number < 2){
-            throw new UnsupportedOperationException("Invalid Api Call");
-        } else if (number < 8){
-            throw new TimeoutException();
-        }
-        Timber.d("%s", number);
-        return number;
+        return getRandomNumber();
     }
 
     private int getRandomNumber() {
         return (int) (Math.random() * (10));
     }
 
-    Observable<Boolean> checkResponseType(Throwable response ) {
-        if ( response instanceof TimeoutException ) {
-            return Observable.just( Boolean.TRUE );
-        }
-        return Observable.error( response );
-    }
 }
