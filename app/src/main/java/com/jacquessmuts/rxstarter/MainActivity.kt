@@ -3,10 +3,7 @@ package com.jacquessmuts.rxstarter
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.jacquessmuts.rxstarter.java.BaseActivity
-import com.jacquessmuts.rxstarter.java.sample.ButtonRapidClickActivity
-import com.jacquessmuts.rxstarter.java.sample.FailingApiCallActivity
-import com.jacquessmuts.rxstarter.java.sample.LongApiCallActivity
-import com.jacquessmuts.rxstarter.java.sample.ThreadSwitchActivity
+import com.jacquessmuts.rxstarter.java.sample.*
 import com.jacquessmuts.rxstarter.kotlin.subscribeAndLogE
 import com.jacquessmuts.rxstarter.models.ActivityIntent
 import com.jacquessmuts.rxstarter.models.getIntent
@@ -21,7 +18,8 @@ class MainActivity : BaseActivity() {
                 ButtonRapidClickActivity::class.java,
                 ThreadSwitchActivity::class.java,
                 FailingApiCallActivity::class.java,
-                LongApiCallActivity::class.java)
+                LongApiCallActivity::class.java,
+                DistinctActivity::class.java)
     }
     lateinit var adapter: ActivityAdapter
 

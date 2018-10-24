@@ -25,6 +25,7 @@
         <activity android:name=".java.sample.ThreadSwitchActivity"/>
         <activity android:name=".java.sample.FailingApiCallActivity"/>
         <activity android:name=".java.sample.LongApiCallActivity"/>
+        <activity android:name=".java.sample.DistinctActivity"/>
     </application>
 
 </manifest>

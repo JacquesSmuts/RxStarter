@@ -7,7 +7,7 @@
     <string name="explanation_thread_switch">The No Threading button keeps everything on the same thread, which locks things up if the process takes long.   The good threading button uses \'observeOn(Schedulers.computation())\' to put the long-running process on a separate thread, and \'observeOn(AndroidSchedulers.mainThread())\' to put it back on the ui thread.</string>
     <string name="explanation_failing_api">The ".doOnRetry()" function updates the textview every time there\'s a timeout error. \n\n The ".retryWhen()" function restarts the api call if there is a timeoutError.</string>
     <string name="explanation_long_load">One Rx Stream does a long api call that takes 4–40 seconds.\n\nThe other stream emits a random number every 3 seconds and sets a loading text based on that.</string>
-
+    <string name="explanation_distinct">Every 200ms, a new random value is emitted, but only values which have not been emitted before get past the filter to the textView. \n\nValues are still being emitted silently right now but get filtered out by distinct()</string>
 
     <string-array name="loading_messages">
         <item>Loading…</item>
