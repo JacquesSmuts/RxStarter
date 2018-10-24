@@ -63,20 +63,20 @@ public class FailingApiCallActivity extends BaseActivity {
         textView.setText("");
 
         //if you add the api call to an rxSub disposable, the api call's result will be ignored if the activity closes
-        rxSubs.add(Observable.just(true)
-                .observeOn(Schedulers.computation())
+        rxSubs.add(Observable.just(true) //emit true, immediately
+                .observeOn(Schedulers.computation()) //put on computation thread
                 .map(input -> getRandomNumberUnreliably()) //do the slow api call which could fail
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread()) //put back on ui thread
                 .doOnError(error -> {
                     if (error instanceof TimeoutException){
-                        setRandomText();
+                        setRandomText(); //if there is a timeout, it will retry
                     } else {
-                        finishWithMessage(error.getLocalizedMessage());
+                        finishWithMessage(error.getLocalizedMessage()); //other errors are displayed to the user
                     }
                 })
                 .retryWhen( error -> error.flatMap(this::checkResponseType) ) //retry the api call if the error is the right type
                 .subscribe( result -> {
-                    finishWithMessage("SUCCESS! Result = " + result);
+                    finishWithMessage("SUCCESS! Result = " + result); //success!
                 }, Timber::e));
     }
 

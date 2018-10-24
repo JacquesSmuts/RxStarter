@@ -68,11 +68,12 @@ public class LongApiCallActivity extends BaseActivity {
         //The timer will stop once rxSubs gets cleared in [BaseActivity]'s onPause method.
         rxSubs.add(intervalDisposable);
 
-        //if you add the api call to an rxSub disposable, the api call's result will be ignored if the activity closes
-        rxSubs.add(Observable.just(true)
-                .observeOn(Schedulers.computation())
-                .map(input -> getRandomNumberSlowly()) //do the slow api call.
-                .observeOn(AndroidSchedulers.mainThread())
+        //Notice how the method of getting the randomnumber call onto a different thread is
+        // different from the one in [FailingApiCallActivity].
+        // RxJava usually has more than one way to do the same thing
+        rxSubs.add(Observable.fromCallable(this::getRandomNumberSlowly)
+                .subscribeOn(Schedulers.computation())//the initial callable is put on the computation thread
+                .observeOn(AndroidSchedulers.mainThread()) //all following parts of this chain will be on UiThread
                 .subscribe( result -> {
                     finishWithMessage("SUCCESS! Result = " + result);
                     intervalDisposable.dispose(); //stop the interval by disposing of it
@@ -104,7 +105,7 @@ public class LongApiCallActivity extends BaseActivity {
      * Simulates an api call which keeps failing
      * @return a random int or throws an exception
      */
-    private int getRandomNumberSlowly() throws UnsupportedOperationException {
+    private int getRandomNumberSlowly() {
         try {
             Thread.sleep(getRandomNumber()*4000);
         } catch (InterruptedException e) {
@@ -114,7 +115,7 @@ public class LongApiCallActivity extends BaseActivity {
     }
 
     private int getRandomNumber() {
-        return (int) (Math.random() * (10));
+        return (int) (Math.random() * 9 + 1);
     }
 
 }
