@@ -26,6 +26,8 @@
         <activity android:name=".java.sample.FailingApiCallActivity"/>
         <activity android:name=".java.sample.LongApiCallActivity"/>
         <activity android:name=".java.sample.DistinctActivity"/>
+
+        <activity android:name=".kotlin.sample.ExtensionActivity"/>
     </application>
 
 </manifest>
