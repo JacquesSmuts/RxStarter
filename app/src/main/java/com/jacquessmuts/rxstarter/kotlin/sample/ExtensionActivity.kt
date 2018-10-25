@@ -63,7 +63,9 @@ class ExtensionActivity : BaseActivity() {
 
     fun <T> Observable<T>.whatsThis(clazz: Class<T>) = ofType(clazz)
 
-    fun <T> Observable<T>.nuzzle(onNext: (bulge: Bulge) -> Unit) = subscribe{ onNext(Bulge()) }
+
+    fun <T> Observable<T>.nuzzle(onNext: (it : T) -> Unit): Disposable =
+            subscribe({ onNext(it) }, Timber::e)
 
     object OwO {
 
