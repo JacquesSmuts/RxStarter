@@ -47,7 +47,7 @@ class ExtensionActivity : BaseActivity() {
         rxSubs.glomp(OwO.notice(button)
                 .whatsThis(Bulge::class.java)
                 .noticeOn(Schedulers.computation())
-                .nuzzle { bulge ->
+                .nuzzle { you ->
                     doApiCall()
                 })
 

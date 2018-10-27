@@ -8,6 +8,7 @@
     <string name="explanation_failing_api">The ".doOnRetry()" function updates the textview every time there\'s a timeout error. \n\n The ".retryWhen()" function restarts the api call if there is a timeoutError.</string>
     <string name="explanation_long_load">One Rx Stream does a long api call that takes 4–40 seconds.\n\nThe other stream emits a random number every 3 seconds and sets a loading text based on that.</string>
     <string name="explanation_distinct">Every 200ms, a new random value is emitted, but only values which have not been emitted before get past the filter to the textView. \n\nValues are still being emitted silently right now but get filtered out by distinct()</string>
+    <string name="explanation_pin">The .mergeWith() function merges all button clicks into a single stream. \n\n.buffer(4) prevents stream emissions until 4 numbers are entered. \n\n.doOnNext() causes a vibration if any button is clicked</string>
 
     <string-array name="loading_messages">
         <item>Loading…</item>

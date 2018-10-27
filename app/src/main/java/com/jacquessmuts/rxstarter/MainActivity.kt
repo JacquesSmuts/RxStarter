@@ -19,7 +19,8 @@ class MainActivity : BaseActivity() {
                 ThreadSwitchActivity::class.java,
                 FailingApiCallActivity::class.java,
                 LongApiCallActivity::class.java,
-                DistinctActivity::class.java)
+                DistinctActivity::class.java,
+                PinActivity::class.java)
     }
     lateinit var adapter: ActivityAdapter
 
