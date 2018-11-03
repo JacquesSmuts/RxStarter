@@ -9,12 +9,15 @@ import com.jacquessmuts.rxstarter.R;
 import com.jacquessmuts.rxstarter.java.BaseActivity;
 import com.jakewharton.rxbinding2.view.RxView;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 import timber.log.Timber;
 
 public class ThreadSwitchActivity extends BaseActivity {
+
+    //A PublishSubject is a hot observable. You can send emissions to it, and it will propagate to all current observers
+    private PublishSubject<Integer> buttonsClickedPublisher = PublishSubject.create();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ public class ThreadSwitchActivity extends BaseActivity {
                 .subscribe( random -> {
                     //set tally to textview
                     textView.setText(String.valueOf(getRandomNumber()));
+                    buttonsClickedPublisher.onNext(1);
                 }, Timber::e));
 
         //This is the good code. It does threading well
@@ -46,12 +50,12 @@ public class ThreadSwitchActivity extends BaseActivity {
                 .observeOn(AndroidSchedulers.mainThread()) //all following functions will be on ui thread
                 .subscribe( random -> {
                     textView.setText(String.valueOf(random));
+                    buttonsClickedPublisher.onNext(1);
                 }, Timber::e));
 
         //merge both buttons's emissions and tally the total number of clicks between them both
-        rxSubs.add(Observable.merge(RxView.clicks(buttonNoThreading),
-                    RxView.clicks(buttonGoodThreading))
-                .map(input -> 1).scan((total, nuValue) -> total + nuValue) //keep a running tally.
+        rxSubs.add(buttonsClickedPublisher
+                .scan((total, nuValue) -> total + nuValue) //keep a running tally.
                 .subscribe( tally -> {
                     if (tally > 3){
                         textViewExplanation.setVisibility(View.VISIBLE);

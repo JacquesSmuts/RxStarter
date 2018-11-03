@@ -60,7 +60,10 @@ public class ListActivity extends BaseActivity {
     }
 
     private void startTimer(){
-        if (isTimerRunning) return;
+        if (isTimerRunning) {
+            findViewById(R.id.textViewExplanation).setVisibility(View.VISIBLE);
+            return;
+        }
         isTimerRunning = true;
 
         rxSubs.add(Observable.interval(7, TimeUnit.MILLISECONDS) //emit at 144 frames per second
@@ -68,11 +71,6 @@ public class ListActivity extends BaseActivity {
                 .subscribe( time -> {
                     timePublisher.onNext(time); //send the string to the publisher
                 }, Timber::e));
-
-        rxSubs.add(Observable.timer(5, TimeUnit.SECONDS)
-                .subscribe( time -> {
-                    findViewById(R.id.textViewExplanation).setVisibility(View.VISIBLE);
-                    }, Timber::e));
     }
 
     private String getTime(){
