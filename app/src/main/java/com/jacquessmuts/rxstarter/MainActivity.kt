@@ -21,7 +21,8 @@ class MainActivity : BaseActivity() {
                 LongApiCallActivity::class.java,
                 DistinctActivity::class.java,
                 PinActivity::class.java,
-                ListActivity::class.java)
+                ListActivity::class.java,
+                ListBusActivity::class.java)
     }
     lateinit var adapter: ActivityAdapter
 
