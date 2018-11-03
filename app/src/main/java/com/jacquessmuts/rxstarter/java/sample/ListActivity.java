@@ -40,7 +40,11 @@ public class ListActivity extends BaseActivity {
     private void setupRecyclerView(){
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
-        String[] listOfNumbers = new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"};
+        int LENGTH = 10000;
+        String[] listOfNumbers = new String[LENGTH];
+        for (int i = 0; i<LENGTH; i++){
+            listOfNumbers[i] = String.valueOf(i);
+        }
 
         recyclerView.setAdapter(new TimerAdapter(listOfNumbers, timeObservable, rxSubs));
     }
@@ -53,14 +57,13 @@ public class ListActivity extends BaseActivity {
                 .subscribe( tally -> {
                     startTimer();
                 }, Timber::e));
-
     }
 
     private void startTimer(){
         if (isTimerRunning) return;
         isTimerRunning = true;
 
-        rxSubs.add(Observable.interval(100, TimeUnit.MILLISECONDS) //emit 100 ms
+        rxSubs.add(Observable.interval(7, TimeUnit.MILLISECONDS) //emit at 144 frames per second
                 .map(i -> getTime()) //get the time as a string
                 .subscribe( time -> {
                     timePublisher.onNext(time); //send the string to the publisher
@@ -73,7 +76,7 @@ public class ListActivity extends BaseActivity {
     }
 
     private String getTime(){
-        SimpleDateFormat fmt = new SimpleDateFormat("mm:ss.S");
+        SimpleDateFormat fmt = new SimpleDateFormat("hh:mm:ss.SSS");
         return fmt.format(new Date());
     }
 }
