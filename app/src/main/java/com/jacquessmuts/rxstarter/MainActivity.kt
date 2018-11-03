@@ -20,7 +20,8 @@ class MainActivity : BaseActivity() {
                 FailingApiCallActivity::class.java,
                 LongApiCallActivity::class.java,
                 DistinctActivity::class.java,
-                PinActivity::class.java)
+                PinActivity::class.java,
+                ListActivity::class.java)
     }
     lateinit var adapter: ActivityAdapter
 

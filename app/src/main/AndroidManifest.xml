@@ -28,6 +28,7 @@
         <activity android:name=".java.sample.LongApiCallActivity"/>
         <activity android:name=".java.sample.DistinctActivity"/>
         <activity android:name=".java.sample.PinActivity"/>
+        <activity android:name=".java.sample.ListActivity"/>
 
         <activity android:name=".kotlin.sample.ExtensionActivity"/>
     </application>
