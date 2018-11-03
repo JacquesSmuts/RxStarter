@@ -9,6 +9,7 @@
     <string name="explanation_long_load">One Rx Stream does a long api call that takes 4–40 seconds.\n\nThe other stream emits a random number every 3 seconds and sets a loading text based on that.</string>
     <string name="explanation_distinct">Every 200ms, a new random value is emitted, but only values which have not been emitted before get past the filter to the textView. \n\nValues are still being emitted silently right now but get filtered out by distinct()</string>
     <string name="explanation_pin">The .mergeWith() function merges all button clicks into a single stream. \n\n.buffer(4) prevents stream emissions until 4 numbers are entered. \n\n.doOnNext() causes a vibration if any button is clicked</string>
+    <string name="explanation_list">A single PublishSubject(String) emits a String every 100ms. \n\n The Observer which listens to this Publisher is passed to the ListAdapter, which sets a listener on each list item. </string>
 
     <string-array name="loading_messages">
         <item>Loading…</item>
