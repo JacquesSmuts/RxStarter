@@ -1,5 +1,7 @@
 package com.jacquessmuts.rxstarter
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.jacquessmuts.rxstarter.java.BaseActivity
@@ -7,8 +9,10 @@ import com.jacquessmuts.rxstarter.java.sample.*
 import com.jacquessmuts.rxstarter.kotlin.subscribeAndLogE
 import com.jacquessmuts.rxstarter.models.ActivityIntent
 import com.jacquessmuts.rxstarter.models.getIntent
+import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.content_main.*
+
 
 class MainActivity : BaseActivity() {
 
@@ -50,6 +54,11 @@ class MainActivity : BaseActivity() {
         rxSubs.add(activityClickedPublisher
                 .subscribeAndLogE { activityIntent ->
                     startActivity(activityIntent.getIntent(this))
+                })
+
+        rxSubs.add(RxView.clicks(findViewById(R.id.button))
+                .subscribeAndLogE {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://bit.ly/rxstarter")))
                 })
     }
 
