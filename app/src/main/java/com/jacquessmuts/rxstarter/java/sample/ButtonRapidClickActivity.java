@@ -36,7 +36,7 @@ public class ButtonRapidClickActivity extends BaseActivity {
                 .subscribe( tally -> {
                     //set tally to textview
                     textView.setText(String.valueOf(tally));
-                    if (tally > 1){
+                    if (tally > 2){
                         textViewExplanation.setVisibility(View.VISIBLE);
                     }
                 }, Timber::e));

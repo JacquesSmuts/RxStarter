@@ -67,15 +67,29 @@ public class ListActivity extends BaseActivity {
         isTimerRunning = true;
 
         rxSubs.add(Observable.interval(7, TimeUnit.MILLISECONDS) //emit at 144 frames per second
-                .map(i -> getTime()) //get the time as a string
-                .subscribe( time -> {
-                    timePublisher.onNext(time); //send the string to the publisher
+                .map(i -> 1)
+                .scan((total, nuValue) -> total + nuValue)
+                .subscribe( counter -> {
+                    timePublisher.onNext(numberToString(counter)); //send the string to the publisher
                 }, Timber::e));
     }
 
     private String getTime(){
         SimpleDateFormat fmt = new SimpleDateFormat("hh:mm:ss.SSS");
         return fmt.format(new Date());
+    }
+
+    private int maxNumber = 144;
+    private String numberToString(int startingNumber) {
+        int number = startingNumber;
+        int remainder;
+        StringBuilder toReturn = new StringBuilder();
+        while (number > 0){
+            remainder = number % maxNumber;
+            toReturn.append(Character.toString((char) (remainder+255)));
+            number /= maxNumber;
+        }
+        return toReturn.reverse().toString();
     }
 }
 

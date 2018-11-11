@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
  */
 
 //adds a standard ±300ms delay for clickableObjects
-fun <T> Observable<T>.filterRapidClicks() = throttleFirst(300, TimeUnit.MILLISECONDS)
+fun <T> Observable<T>.filterRapidClicks() = throttleFirst(1000, TimeUnit.MILLISECONDS)
 
 //same as subscribe, except it logs errors with Timber.e() automatically
 //TODO: try to figure out how to make this work. Consumer not recognizing lambdas?
@@ -29,6 +29,10 @@ class ErrorConsumer<T>: Consumer<T> {
             Timber.e(t)
     }
 }
+
+fun <T> Observable<T>.tallyClicks(): Observable<Int> =
+        map { input -> 1 }.scan { total, nuValue -> total + nuValue }
+
 /**
  * Puts the Observer on the Main/UI Thread using [Observable.observeOn]. Please make sure you understand
  * the difference between [Observable.subscribeOn] and [Observable.observeOn] when using this.
