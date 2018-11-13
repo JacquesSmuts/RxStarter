@@ -1,7 +1,7 @@
 # RxStarter
 This is a starter project for demonstrating RxJava2
 
-You can download this app on the play store [here](link incoming)
+You can download this app on the play store [here](https://play.google.com/store/apps/details?id=com.jacquessmuts.rxstarter)
 
 ## Getting into RxJava
 
