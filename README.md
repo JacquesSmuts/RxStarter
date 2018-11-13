@@ -3,6 +3,18 @@ This is a starter project for demonstrating RxJava2
 
 You can download this app on the play store [here](link incoming)
 
+## Getting into RxJava
+
+Work your way through these links to get into RxJava.
+
+| Link | Reason to Read |
+| ------- | ---------|
+| [Observer Pattern](https://en.wikipedia.org/wiki/Observer_pattern) | Background on Observer pattern and why a bad implementation can cause memory leaks |
+| [ReactiveX Intro](http://reactivex.io/intro.html) | RX's official intro to Reactive Programming. More Background. |
+| [Froussios Intro to RxJava](https://github.com/Froussios/Intro-To-RxJava) | A very definitive intro to RxJava basics. Must Read. | 
+| [Android Samples](https://github.com/amitshekhariitbhu/RxJava2-Android-Samples) | Samples of RxJava in Android. Ugly due to lack of Lambdas, but extensive examples. |
+| [RxJava repo](https://github.com/ReactiveX/RxJava) | This is the official repo but the documentation here is actually not that great for starting out. Don't feel bad if this doens't make a lot of sense. |
+
 ## Useage
 The app has a number of samples that you can play around with in the app. There are shorthand explanations on each screen plus more detailed information in the code comments.
 
