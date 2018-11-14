@@ -9,7 +9,7 @@ Work your way through these links to get into RxJava.
 
 | Link | Reason to Read |
 | ------- | ---------|
-| [Observer Pattern](https://en.wikipedia.org/wiki/Observer_pattern) | Background on Observer pattern and why a bad implementation can cause memory leaks |
+| [Observer Pattern](https://en.wikipedia.org/wiki/Observer_pattern) | Background on Observer pattern and why a naive implementation can easily result in memory leaks. Luckily RxJava avoids this by design. |
 | [ReactiveX Intro](http://reactivex.io/intro.html) | RX's official intro to Reactive Programming. More Background. |
 | [Froussios Intro to RxJava](https://github.com/Froussios/Intro-To-RxJava) | A very definitive intro to RxJava basics. Must Read. | 
 | [Android Samples](https://github.com/amitshekhariitbhu/RxJava2-Android-Samples) | Samples of RxJava in Android. Ugly due to lack of Lambdas, but extensive examples. |
