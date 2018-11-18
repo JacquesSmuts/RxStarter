@@ -7,6 +7,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -38,6 +39,8 @@ fun <T> Observable<T>.tallyClicks(): Observable<Int> =
  * the difference between [Observable.subscribeOn] and [Observable.observeOn] when using this.
  */
 fun <T> Observable<T>.uiThread() = observeOn(AndroidSchedulers.mainThread())
+
+fun <T> Observable<T>.backgroundThread() = observeOn(Schedulers.computation())
 
 fun <T> Single<T>.uiThread() = observeOn(AndroidSchedulers.mainThread())
 

@@ -12,8 +12,6 @@ import com.jacquessmuts.rxstarter.R;
 import com.jacquessmuts.rxstarter.java.BaseActivity;
 import com.jakewharton.rxbinding2.view.RxView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -46,7 +44,7 @@ public class ListActivity extends BaseActivity {
             listOfNumbers[i] = String.valueOf(i);
         }
 
-        recyclerView.setAdapter(new TimerAdapter(listOfNumbers, timeObservable, rxSubs));
+        recyclerView.setAdapter(new CounterAdapter(listOfNumbers, timeObservable, rxSubs));
     }
 
     @Override
@@ -74,11 +72,6 @@ public class ListActivity extends BaseActivity {
                 }, Timber::e));
     }
 
-    private String getTime(){
-        SimpleDateFormat fmt = new SimpleDateFormat("hh:mm:ss.SSS");
-        return fmt.format(new Date());
-    }
-
     private int maxNumber = 144;
     private String numberToString(int startingNumber) {
         int number = startingNumber;
@@ -96,7 +89,7 @@ public class ListActivity extends BaseActivity {
 /**
  * Normally this adapter would be extracted into its own file, but it's kept here for demonstrative purposes
  */
-class TimerAdapter extends RecyclerView.Adapter<TimerAdapter.TimerViewHolder> {
+class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterViewHolder> {
 
     private String[] numbers;
     private Observable<String> timeObservable;
@@ -107,7 +100,7 @@ class TimerAdapter extends RecyclerView.Adapter<TimerAdapter.TimerViewHolder> {
         return numbers.length;
     }
 
-    TimerAdapter(String[] myDataset, Observable<String> observable, CompositeDisposable parentDisposables) {
+    CounterAdapter(String[] myDataset, Observable<String> observable, CompositeDisposable parentDisposables) {
         numbers = myDataset;
         timeObservable = observable;
         rxSubs = parentDisposables;
@@ -115,12 +108,12 @@ class TimerAdapter extends RecyclerView.Adapter<TimerAdapter.TimerViewHolder> {
 
     @NonNull
     @Override
-    public TimerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return TimerViewHolder.newInstance(parent, timeObservable, rxSubs);
+    public CounterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return CounterViewHolder.newInstance(parent, timeObservable, rxSubs);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TimerViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CounterViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.textViewNumber.setText(numbers[position]);
@@ -128,20 +121,20 @@ class TimerAdapter extends RecyclerView.Adapter<TimerAdapter.TimerViewHolder> {
     }
 
 
-    static class TimerViewHolder extends RecyclerView.ViewHolder {
+    static class CounterViewHolder extends RecyclerView.ViewHolder {
 
         //This disposable is used to prevent memory leaks
         private Disposable disposable;
 
-        static TimerViewHolder newInstance(ViewGroup parent, Observable<String> timeObservable, CompositeDisposable rxSubs){
+        static CounterViewHolder newInstance(ViewGroup parent, Observable<String> timeObservable, CompositeDisposable rxSubs){
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.viewholder_timer, parent, false);
-            return new TimerViewHolder(view);
+            return new CounterViewHolder(view);
         }
 
         TextView textViewNumber;
         final TextView textViewTime;
-        TimerViewHolder(View v) {
+        CounterViewHolder(View v) {
             super(v);
             textViewNumber = v.findViewById(R.id.textViewName);
             textViewTime = v.findViewById(R.id.textViewTime);
@@ -157,6 +150,7 @@ class TimerAdapter extends RecyclerView.Adapter<TimerAdapter.TimerViewHolder> {
             }
 
             //
+
             disposable = timeObservable
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(textViewTime::setText, Timber::e);
