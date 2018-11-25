@@ -72,14 +72,20 @@ public class ListActivity extends BaseActivity {
                 }, Timber::e));
     }
 
-    private int maxNumber = 144;
+    /**
+     * This class takes an input number, and turns it into a base-144 numbering system, because
+     * we expect about 144 updates per second.
+     * @param startingNumber
+     * @return
+     */
     private String numberToString(int startingNumber) {
         int number = startingNumber;
         int remainder;
         StringBuilder toReturn = new StringBuilder();
         while (number > 0){
+            int maxNumber = 144;
             remainder = number % maxNumber;
-            toReturn.append(Character.toString((char) (remainder+255)));
+            toReturn.append(Character.toString((char) (remainder+8800)));
             number /= maxNumber;
         }
         return toReturn.reverse().toString();

@@ -68,7 +68,7 @@ class ListActivity : BaseActivity() {
         val toReturn = StringBuilder()
         while (number > 0) {
             remainder = number % maxNumber
-            toReturn.append(Character.toString((remainder + 255).toChar()))
+            toReturn.append(Character.toString((remainder + 500).toChar()))
             number /= maxNumber
         }
         return toReturn.reverse().toString()
