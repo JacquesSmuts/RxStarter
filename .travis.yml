@@ -1,5 +1,4 @@
 language: android
-jdk: oraclejdk8
 android:
   components:
      - tools
@@ -13,7 +12,6 @@ android:
     # Specify at least one system image,
     # if you need to run emulator(s) during your tests
     - sys-img-x86-android-26
-
 
   licenses:
     - 'android-sdk-license-.+'
