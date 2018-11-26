@@ -1,28 +1,81 @@
-language: android
-android:
-  components:
-    # Uncomment the lines below if you want to
-    # use the latest revision of Android SDK Tools
-    # - tools
-    # - platform-tools
-
-    # The BuildTools version used by your project
-    - build-tools-28.0.8
-
-    # The SDK version used to compile your project
-    - android-28
-
-    # Additional components
-    - extra-google-google_play_services
-    - extra-google-m2repository
-    - extra-android-m2repository
-
-    # Specify at least one system image,
-    # if you need to run emulator(s) during your tests
-    - sys-img-x86-android-26
-
-
-  licenses:
-    - 'android-sdk-preview-license-52d11cd2'
-    - 'android-sdk-license-.+'
-    - 'google-gdk-license-.+'
+{
+  "os": "linux",
+  "jdk": "oraclejdk8",
+  "dist": "precise",
+  "sudo": "required",
+  "cache": {
+    "directories": [
+      "${TRAVIS_BUILD_DIR}/gradle/caches/",
+      "${TRAVIS_BUILD_DIR}/gradle/wrapper/dists/"
+    ]
+  },
+  "group": "stable",
+  "script": [
+    "cd ${TRAVIS_BUILD_DIR}/${DIR} && ./gradlew connectedCheck"
+  ],
+  "android": {
+    "components": [
+      "tools",
+      "build-tools-28.0.3",
+      "platform-tools",
+      "tools"
+    ]
+  },
+  "install": [
+    "sdkmanager --list || true",
+    "sdkmanager --uninstall \"system-images;android-15;default;armeabi-v7a\"",
+    "sdkmanager --uninstall \"system-images;android-16;default;armeabi-v7a\"",
+    "sdkmanager --uninstall \"system-images;android-17;default;armeabi-v7a\"",
+    "sdkmanager --uninstall \"system-images;android-18;default;armeabi-v7a\"",
+    "sdkmanager --uninstall \"system-images;android-19;default;armeabi-v7a\"",
+    "sdkmanager --uninstall \"system-images;android-21;default;armeabi-v7a\"",
+    "sdkmanager --uninstall \"extras;google;google_play_services\"",
+    "sdkmanager --uninstall \"extras;android;support\"",
+    "sdkmanager --uninstall \"platforms;android-10\"",
+    "sdkmanager --uninstall \"platforms;android-15\"",
+    "sdkmanager --uninstall \"platforms;android-16\"",
+    "sdkmanager --uninstall \"platforms;android-17\"",
+    "sdkmanager --uninstall \"platforms;android-18\"",
+    "sdkmanager --uninstall \"platforms;android-19\"",
+    "sdkmanager --uninstall \"platforms;android-20\"",
+    "sdkmanager --uninstall \"platforms;android-21\"",
+    "sdkmanager --uninstall \"build-tools;21.1.2\"",
+    "echo yes | sdkmanager \"tools\"",
+    "echo yes | sdkmanager \"platforms;android-28\"",
+    "echo yes | sdkmanager \"platforms;android-${API}\"",
+    "echo yes | sdkmanager \"extras;android;m2repository\"",
+    "echo yes | sdkmanager \"extras;google;m2repository\"",
+    "echo yes | sdkmanager \"extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2\"",
+    "echo yes | sdkmanager \"extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2\"",
+    "echo yes | sdkmanager \"$EMULATOR\"",
+    "echo no | avdmanager create avd -n acib -k \"$EMULATOR\" -f --abi \"$ABI\" --tag \"$TAG\"",
+    "emulator -avd acib -engine classic -no-window -camera-back none -camera-front none -verbose -qemu -m 512 &",
+    "adb wait-for-device get-serialno",
+    "cd ${TRAVIS_BUILD_DIR}/${DIR} && ./gradlew --version",
+    "cd ${TRAVIS_BUILD_DIR}/${DIR} && ./gradlew clean build",
+    "sdkmanager --list || true"
+  ],
+  "language": "android",
+  "global_env": "DIR=constraint-layout-start API=25 TAG=google_apis ABI=armeabi-v7a QEMU_AUDIO_DRV=none GRADLE_USER_HOME=\"${TRAVIS_BUILD_DIR}/gradle\" ANDROID_HOME=/usr/local/android-sdk-24.0.2 TOOLS=${ANDROID_HOME}/tools PATH=${ANDROID_HOME}:${ANDROID_HOME}/emulator:${TOOLS}:${TOOLS}/bin:${ANDROID_HOME}/platform-tools:${PATH} ADB_INSTALL_TIMEOUT=20",
+  "after_script": [
+    "cat ${TRAVIS_BUILD_DIR}/${DIR}/*/build/outputs/androidTest-results/connected/*",
+    "cat ${TRAVIS_BUILD_DIR}/${DIR}/*/build/reports/lint-results.xml"
+  ],
+  "before_cache": [
+    "rm -f ${TRAVIS_BUILD_DIR}/gradle/caches/modules-2/modules-2.lock",
+    "rm -f ${TRAVIS_BUILD_DIR}/gradle/caches/3.3/classAnalysis/classAnalysis.lock",
+    "rm -f ${TRAVIS_BUILD_DIR}/gradle/caches/3.3/jarSnapshots/jarSnapshots.lock"
+  ],
+  "before_script": [
+    "android-wait-for-emulator",
+    "adb shell settings put global window_animation_scale 0 &",
+    "adb shell settings put global transition_animation_scale 0 &",
+    "adb shell settings put global animator_duration_scale 0 &",
+    "sleep 30",
+    "adb shell input keyevent 82 &"
+  ],
+  "before_install": [
+    "export EMULATOR=\"system-images;android-${API};${TAG};${ABI}\"",
+    "echo 'count=0' > /home/travis/.android/repositories.cfg"
+  ]
+}
