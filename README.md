@@ -20,7 +20,7 @@ Work your way through these links to get into RxJava.
 | [Android Samples](https://github.com/amitshekhariitbhu/RxJava2-Android-Samples) | Samples of RxJava in Android. Ugly due to lack of Lambdas, but extensive examples. |
 | [RxJava repo](https://github.com/ReactiveX/RxJava) | This is the official repo but the documentation here is actually not that great for starting out. Don't feel bad if this doens't make a lot of sense. |
 
-## Useage
+## Usage
 The app has a number of samples that you can play around with in the app. There are shorthand explanations on each screen plus more detailed information in the code comments.
 
 Each activity has a Java and Kotlin equivalent. The Kotlin classes are not just conversions of the Java classes. The Kotlin versions contain additional nice things such as Kotlin Extension functions.
