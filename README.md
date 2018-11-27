@@ -1,3 +1,6 @@
+
+[![CircleCI](https://circleci.com/gh/JacquesSmuts/RxStarter/tree/master.svg?style=svg)](https://circleci.com/gh/JacquesSmuts/RxStarter/tree/master)
+
 # RxStarter
 This is a starter project for demonstrating RxJava2
 
