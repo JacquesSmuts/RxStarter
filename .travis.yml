@@ -16,10 +16,10 @@ android:
     - platform-tools
 
     # The BuildTools version used by your project
-    - build-tools-26.0.1
+    - build-tools-28.0.2
 
     # The SDK version used to compile your project
-    - android-26
+    - android-28
 
     # Additional components
     - extra-google-google_play_services
@@ -28,9 +28,10 @@ android:
 
     # Specify at least one system image,
     # if you need to run emulator(s) during your tests
-    - sys-img-x86-android-26
+    - sys-img-armeabi-v7a-android-26
 
   licenses:
+    - 'android-sdk-preview-license-52d11cd2'
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
 
@@ -46,11 +47,12 @@ before_script:
   - android-wait-for-emulator
   - adb shell input keyevent 82
 
-before_install:
-  - mkdir "$ANDROID_HOME/licenses" || true
-  - echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > "$ANDROID_HOME/licenses/android-sdk-license"
-  # Install the rest of tools (e.g., avdmanager)
-  - sdkmanager tools
+# Emulator Management: Create, Start and Wait
+before_script:
+  - echo no | android create avd --force -n test -t android-26 --abi armeabi-v7a
+  - emulator -avd test -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
 
 
 script:
