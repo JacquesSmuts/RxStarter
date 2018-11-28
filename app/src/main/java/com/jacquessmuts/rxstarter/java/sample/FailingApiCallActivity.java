@@ -77,7 +77,7 @@ public class FailingApiCallActivity extends BaseActivity {
                 .retryWhen( error -> error.flatMap(this::checkResponseType) ) //retry the api call if the error is the right type
                 .subscribe( result -> {
                     finishWithMessage("SUCCESS! Result = " + result); //success!
-                }, Timber::e));
+                }, Timber::e)); //This Timber log is not reached if the retryWhen() function fires first.
     }
 
     private void finishWithMessage(String message) {
@@ -122,6 +122,10 @@ public class FailingApiCallActivity extends BaseActivity {
         return (int) (Math.random() * (9) + 1);
     }
 
+    /**
+     * The retryWhen operator requires an Observable<Boolean> to return either the boolean or a
+     * throwable inside the Observable.
+     */
     Observable<Boolean> checkResponseType(Throwable response) {
         if ( response instanceof TimeoutException ) {
             return Observable.just( Boolean.TRUE );

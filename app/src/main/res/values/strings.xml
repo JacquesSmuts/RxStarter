@@ -11,6 +11,7 @@
     <string name="explanation_pin">The .mergeWith() function merges all button clicks into a single stream. \n\n.buffer(4) prevents stream emissions until 4 numbers are entered. \n\n.doOnNext() causes a vibration if any button is clicked</string>
     <string name="explanation_list">A single PublishSubject(String) emits a String 144 times per second. \n\nThis Publisher\'s Observer is passed to the ListAdapter. \n\nThe ListAdapter sets a listener on each individual item, to update the TextView if it gets an emission</string>
     <string name="explanation_bus_list">This class is identical to ListActivity, except it uses an RxBus to act as an EventBus. \n\nAn RxBus is useful in situations where several distantly related classes in different contexts may need to be informed of each update.</string>
+    <string name="pin_match_success">PIN MATCHES PREVIOUS</string>
 
     <string-array name="loading_messages">
         <item>Loading…</item>

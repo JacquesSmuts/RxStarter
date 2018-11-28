@@ -48,7 +48,6 @@ public class PinActivity extends BaseActivity {
         TextView textView = findViewById(R.id.textView);
         TextView textViewExplanation = findViewById(R.id.textViewExplanation);
 
-
         rxSubs.add(RxView.clicks(button1).map(in-> 1)
                 .mergeWith(RxView.clicks(button2).map(in->2)) //Each button emits its own mapped value into the same stream
                 .mergeWith(RxView.clicks(button3).map(in->3))
@@ -75,7 +74,7 @@ public class PinActivity extends BaseActivity {
 
                     textViewExplanation.setVisibility(View.VISIBLE);
                     if (pin.equals(savedPin)){
-                        textView.setText("PIN MATCHES PREVIOUS");
+                        textView.setText(R.string.pin_match_success);
                     } else {
                         savedPin = pin;
                         textView.setText("****");

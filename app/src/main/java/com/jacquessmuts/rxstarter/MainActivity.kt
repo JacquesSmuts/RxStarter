@@ -19,6 +19,7 @@ class MainActivity : BaseActivity() {
 
     companion object {
         val CLICKABLE_ACTIVITIES = listOf(
+                SingleActivity::class.java,
                 ButtonRapidClickActivity::class.java,
                 ThreadSwitchActivity::class.java,
                 FailingApiCallActivity::class.java,
