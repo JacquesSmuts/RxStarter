@@ -51,7 +51,7 @@ public class DistinctActivity extends BaseActivity {
         }
         calculationOngoing = true;
 
-        //Add an observable to change the textview while the api call is loading
+        // Add an observable to change the textview while the api call is loading
         TextView textView = findViewById(R.id.textView);
         ProgressBar progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
@@ -59,12 +59,12 @@ public class DistinctActivity extends BaseActivity {
 
 
         rxSubs.add(Observable.interval(200, 200, TimeUnit.MILLISECONDS)
-                .observeOn(Schedulers.computation())  //all following parts of this chain will be on computation thread
+                .observeOn(Schedulers.computation())  // all following parts of this chain will be on computation thread
                 .map(input -> getRandomNumber())
                 .distinct()
-                .observeOn(AndroidSchedulers.mainThread()) //all following parts of this chain will be on UiThread
+                .observeOn(AndroidSchedulers.mainThread()) // all following parts of this chain will be on UiThread
                 .subscribe( result -> {
-                    textView.append(result + " "); //append value to textview\
+                    textView.append(result + " "); // append value to textview\
                 }, Timber::e));
 
     }

@@ -29,12 +29,12 @@ public class ButtonRapidClickActivity extends BaseActivity {
         TextView textView = findViewById(R.id.textView);
         TextView textViewExplanation = findViewById(R.id.textViewExplanation);
 
-        rxSubs.add(RxView.clicks(button) //get clicks
-                .throttleFirst(1000, TimeUnit.MILLISECONDS) //only once per 1000ms
-                .map( input -> 1) //emit clicks as 1
-                .scan((total, nuValue) -> total + nuValue) //keep a running tally.
+        rxSubs.add(RxView.clicks(button) // get clicks
+                .throttleFirst(1000, TimeUnit.MILLISECONDS) // only once per 1000ms
+                .map( input -> 1) // emit clicks as 1
+                .scan((total, nuValue) -> total + nuValue) // keep a running tally.
                 .subscribe( tally -> {
-                    //set tally to textview
+                    // set tally to textview
                     textView.setText(String.valueOf(tally));
                     if (tally > 3){
                         textViewExplanation.setVisibility(View.VISIBLE);

@@ -13,7 +13,7 @@ import io.reactivex.subjects.PublishSubject
 
 class ThreadSwitchActivity : BaseActivity() {
 
-    //A PublishSubject is a hot observable. You can send emissions to it, and it will propagate to all current observers
+    // A PublishSubject is a hot observable. You can send emissions to it, and it will propagate to all current observers
     private val buttonsClickedPublisher = PublishSubject.create<Int>()
 
     /**
@@ -43,26 +43,26 @@ class ThreadSwitchActivity : BaseActivity() {
         val textView = findViewById<TextView>(R.id.textView)
         val textViewExplanation = findViewById<TextView>(R.id.textViewExplanation)
 
-        //this is the same as just setting the onClick normally, inside a try{}catch{]
+        // this is the same as just setting the onClick normally, inside a try{}catch{]
         rxSubs.add(RxView.clicks(findViewById(R.id.buttonNoThreading))
                 .subscribeAndLogE { input ->
                     textView.text = randomNumber.toString()
-                    buttonsClickedPublisher.onNext(1) //This is just for tallying up the clicks
+                    buttonsClickedPublisher.onNext(1) // This is just for tallying up the clicks
                 })
 
-        //This is the good code. It does threading well
+        // This is the good code. It does threading well
         rxSubs.add(RxView.clicks(findViewById(R.id.buttonGoodThreading))
-                .backgroundThread() //all following functions will be on computation thread
+                .backgroundThread() // all following functions will be on computation thread
                 .map { input -> randomNumber }
-                .uiThread() //all following functions will be on ui thread
+                .uiThread() // all following functions will be on ui thread
                 .subscribeAndLogE { random ->
                     textView.text = random.toString()
-                    buttonsClickedPublisher.onNext(1) //This is just for tallying up the clicks
+                    buttonsClickedPublisher.onNext(1) // This is just for tallying up the clicks
                 })
 
-        //merge both buttons's emissions and tally the total number of clicks between them both
+        // merge both buttons's emissions and tally the total number of clicks between them both
         rxSubs.add(buttonsClickedPublisher
-                .scan { total, nuValue -> total + nuValue } //keep a running tally.
+                .scan { total, nuValue -> total + nuValue } // keep a running tally.
                 .subscribeAndLogE { tally ->
                     if (tally > 3) {
                         textViewExplanation.visibility = View.VISIBLE

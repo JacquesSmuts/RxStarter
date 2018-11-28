@@ -25,11 +25,11 @@ class ButtonRapidClickActivity : BaseActivity() {
         val textView = findViewById<TextView>(R.id.textView)
         val textViewExplanation = findViewById<TextView>(R.id.textViewExplanation)
 
-        rxSubs.add(RxView.clicks(button) //get clicks
-                .filterRapidClicks() //same as throttleFirst(1000, TimeUnit.MILLISECONDS)
+        rxSubs.add(RxView.clicks(button) // get clicks
+                .filterRapidClicks() // same as throttleFirst(1000, TimeUnit.MILLISECONDS)
                 .tallyClicks()
-                .subscribeAndLogE { tally -> //subscribeAndLogE is an extension function which automatically logs all errors thrown
-                    //set tally to textview
+                .subscribeAndLogE { tally -> // subscribeAndLogE is an extension function which automatically logs all errors thrown
+                    // set tally to textview
                     textView.text = tally.toString()
                     if (tally > 2) {
                         textViewExplanation.visibility = View.VISIBLE

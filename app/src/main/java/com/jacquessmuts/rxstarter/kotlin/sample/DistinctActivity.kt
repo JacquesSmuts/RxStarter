@@ -49,7 +49,7 @@ class DistinctActivity : BaseActivity() {
         }
         calculationOngoing = true
 
-        //Add an observable to change the textview while the api call is loading
+        // Add an observable to change the textview while the api call is loading
         val textView = findViewById<TextView>(R.id.textView)
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         progressBar.visibility = View.VISIBLE
@@ -57,12 +57,12 @@ class DistinctActivity : BaseActivity() {
 
 
         rxSubs.add(Observable.interval(200, 200, TimeUnit.MILLISECONDS)
-                .backgroundThread() //all following parts of this chain will be on computation thread
+                .backgroundThread() // all following parts of this chain will be on computation thread
                 .map { input -> randomNumber }
                 .distinct()
-                .uiThread() //all following parts of this chain will be on UiThread
+                .uiThread() // all following parts of this chain will be on UiThread
                 .subscribeAndLogE { result ->
-                    textView.append(result!!.toString() + " ") //append value to textview\
+                    textView.append(result!!.toString() + " ") // append value to textview
                 })
 
     }

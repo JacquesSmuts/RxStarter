@@ -52,7 +52,7 @@ public class LongApiCallActivity extends BaseActivity {
         }
         apiCallOngoing = true;
 
-        //Add an observable to change the textview while the api call is loading
+        // Add an observable to change the textview while the api call is loading
         TextView textView = findViewById(R.id.textView);
         ProgressBar progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
@@ -60,9 +60,9 @@ public class LongApiCallActivity extends BaseActivity {
 
         // intervalDisposable sets Random Text every 3 seconds, forever, unless we dispose of it
         Disposable intervalDisposable = Observable.interval(3, 3, TimeUnit.SECONDS)
-                .map(input -> getRandomNumber()) //get a random number
+                .map(input -> getRandomNumber()) // get a random number
                 .subscribe(randomNumber -> {
-                    setRandomText(randomNumber); //uses random number to choose a message. Can be replaced with method call.
+                    setRandomText(randomNumber); // uses random number to choose a message. Can be replaced with method call.
                  }, Timber::e);
 
         // The timer will stop once rxSubs gets cleared in [BaseActivity]'s onPause method.

@@ -23,9 +23,9 @@ import timber.log.Timber;
 
 public class ListActivity extends BaseActivity {
 
-    //normally you would want to lazy-load these
-    PublishSubject<String> textPublisher = PublishSubject.create(); //create a publisher you can publish to and subscribe to
-    Observable<String> textObservable = textPublisher.hide(); //create an observer which you can NOT publish to, but you can subscribe to
+    // normally you would want to lazy-load these
+    PublishSubject<String> textPublisher = PublishSubject.create(); // create a publisher you can publish to and subscribe to
+    Observable<String> textObservable = textPublisher.hide(); // create an observer which you can NOT publish to, but you can subscribe to
     private boolean isTimerRunning = false;
 
     @Override
@@ -62,11 +62,11 @@ public class ListActivity extends BaseActivity {
         }
         isTimerRunning = true;
 
-        rxSubs.add(Observable.interval(7, TimeUnit.MILLISECONDS) //emit 144 times (frames) per second
+        rxSubs.add(Observable.interval(7, TimeUnit.MILLISECONDS) // emit 144 times (frames) per second
                 .map(i -> 1)
                 .scan((total, nuValue) -> total + nuValue)
                 .subscribe( total -> {
-                    textPublisher.onNext(numberToString(total)); //send the string to the publisher
+                    textPublisher.onNext(numberToString(total)); // send the string to the publisher
                 }, Timber::e));
     }
 
@@ -98,7 +98,7 @@ class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterViewHold
 
     private String[] numbers;
     private Observable<String> timeObservable;
-    private CompositeDisposable rxSubs; //this disposable is managed by the parent activity lifecycle.
+    private CompositeDisposable rxSubs; // this disposable is managed by the parent activity lifecycle.
 
     @Override
     public int getItemCount() {
@@ -150,9 +150,9 @@ class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterViewHold
          */
         void setTimerListener(Observable<String> textObservable, CompositeDisposable rxSubs){
 
-            //if the disposable already exists, that means the ViewHolder is being recycled by recyclerview
+            // if the disposable already exists, that means the ViewHolder is being recycled by recyclerview
             if (disposable != null && !disposable.isDisposed()){
-                //So delete it out of the list of disposables in BaseActivity and dispose of it.
+                // So delete it out of the list of disposables in BaseActivity and dispose of it.
                 rxSubs.delete(disposable);
                 disposable.dispose();
             }
@@ -162,7 +162,7 @@ class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterViewHold
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(textViewTime::setText, Timber::e);
 
-            //and make sure the subscription is disposed of if the activity's lifecycle requires it
+            // and make sure the subscription is disposed of if the activity's lifecycle requires it
             rxSubs.add(disposable);
         }
 

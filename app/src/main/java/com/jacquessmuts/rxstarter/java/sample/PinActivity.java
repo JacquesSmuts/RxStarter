@@ -49,7 +49,7 @@ public class PinActivity extends BaseActivity {
         TextView textViewExplanation = findViewById(R.id.textViewExplanation);
 
         rxSubs.add(RxView.clicks(button1).map(in-> 1)
-                .mergeWith(RxView.clicks(button2).map(in->2)) //Each button emits its own mapped value into the same stream
+                .mergeWith(RxView.clicks(button2).map(in->2)) // Each button emits its own mapped value into the same stream
                 .mergeWith(RxView.clicks(button3).map(in->3))
                 .mergeWith(RxView.clicks(button4).map(in->4))
                 .mergeWith(RxView.clicks(button5).map(in->5))
@@ -57,20 +57,20 @@ public class PinActivity extends BaseActivity {
                 .mergeWith(RxView.clicks(button7).map(in->7))
                 .mergeWith(RxView.clicks(button8).map(in->8))
                 .mergeWith(RxView.clicks(button9).map(in->9))
-                .doOnNext(output -> button1.post(() -> { //do on next happens after each emission, regardless of result or filter
-                    //This happens AFTER subscribe
+                .doOnNext(output -> button1.post(() -> { // do on next happens after each emission, regardless of result or filter
+                    // This happens AFTER subscribe
                     if (vibrator != null) {
-                        vibrator.vibrate(100 * output); //vibrates phone each click
+                        vibrator.vibrate(100 * output); // vibrates phone each click
                     }
                 }))
                 .map(input-> {
-                    textView.setText(""); //clear the textview
-                    return input; //map is an easy way to cause a side-effect BEFORE a filter or subscribe
+                    textView.setText(""); // clear the textview
+                    return input; // map is an easy way to cause a side-effect BEFORE a filter or subscribe
                 })
-                .buffer(4) //only emits once 4 buttons are clicked, then collects them in a list<>
-                .subscribe( pin -> { //final result is a list of items, each item being a list of 4 ints
+                .buffer(4) // only emits once 4 buttons are clicked, then collects them in a list<>
+                .subscribe( pin -> { // final result is a list of items, each item being a list of 4 ints
 
-                    if (pin.size() != 4) throw new IllegalStateException(); //buffer should prevent this from ever happening
+                    if (pin.size() != 4) throw new IllegalStateException(); // buffer should prevent this from ever happening
 
                     textViewExplanation.setVisibility(View.VISIBLE);
                     if (pin.equals(savedPin)){

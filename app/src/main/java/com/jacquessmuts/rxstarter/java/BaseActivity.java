@@ -15,8 +15,8 @@ import io.reactivex.disposables.CompositeDisposable;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    //Add all your subscriptions as disposables to this CompositeDisposable, to avoid memory leaks
-    //Ideally you want to lazy-load your compositeDisposable, but it works fine enough like this
+    // Add all your subscriptions as disposables to this CompositeDisposable, to avoid memory leaks
+    // Ideally you want to lazy-load your compositeDisposable, but it works fine enough like this
     protected CompositeDisposable rxSubs = new CompositeDisposable();
 
     @Override
@@ -36,7 +36,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        //Clear all your subscriptions every time the activity loses focus
+        // Clear all your subscriptions every time the activity loses focus
         rxSubs.clear();
         super.onPause();
     }
