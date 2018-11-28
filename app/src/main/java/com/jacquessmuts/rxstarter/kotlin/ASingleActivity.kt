@@ -25,18 +25,18 @@ class ASingleActivity : AppCompatActivity() {
         val fab = findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener{
 
-            //Create a single. This is not ideal.
+            // Create a single. This is not ideal.
             Single.just(getAGreeting())
                     .subscribe { resultString -> textView.text = resultString }
 
-            //Create a single, and make sure it's disposed of in onDestroy. This is better.
+            // Create a single, and make sure it's disposed of in onDestroy. This is better.
             singleDisposable = Single.just(getAGreeting())
                     .subscribe { resultString -> textView.text = resultString }
         }
     }
 
     override fun onDestroy() {
-        //dispose of all your Subscriptions in onDestroy, to prevent memory leaks
+        // dispose of all your Subscriptions in onDestroy, to prevent memory leaks
         singleDisposable?.dispose()
 
         super.onDestroy()

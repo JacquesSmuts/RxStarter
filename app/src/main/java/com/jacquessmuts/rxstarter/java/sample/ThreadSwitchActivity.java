@@ -15,7 +15,7 @@ import timber.log.Timber;
 
 public class ThreadSwitchActivity extends BaseActivity {
 
-    //A PublishSubject is a hot observable. You can send emissions to it, and it will propagate to all current observers
+    // A PublishSubject is a hot observable. You can send emissions to it, and it will propagate to all current observers
     private PublishSubject<Integer> buttonsClickedPublisher = PublishSubject.create();
 
     @Override
@@ -31,26 +31,26 @@ public class ThreadSwitchActivity extends BaseActivity {
         TextView textView = findViewById(R.id.textView);
         TextView textViewExplanation = findViewById(R.id.textViewExplanation);
 
-        //this is the same as just setting the onClick normally, inside a try{}catch{]
+        // this is the same as just setting the onClick normally, inside a try{}catch{]
         rxSubs.add(RxView.clicks(findViewById(R.id.buttonNoThreading))
                 .subscribe( input -> {
                     textView.setText(String.valueOf(getRandomNumber()));
-                    buttonsClickedPublisher.onNext(1); //This is just for tallying up the clicks
+                    buttonsClickedPublisher.onNext(1); // this is just for tallying up the clicks
                 }, Timber::e));
 
-        //This is the good code. It does threading well
+        // This is the good code. It does threading well
         rxSubs.add(RxView.clicks(findViewById(R.id.buttonGoodThreading))
-                .observeOn(Schedulers.computation()) //all following functions will be on computation thread
+                .observeOn(Schedulers.computation()) // all following functions will be on computation thread
                 .map(input -> getRandomNumber())
-                .observeOn(AndroidSchedulers.mainThread()) //all following functions will be on ui thread
+                .observeOn(AndroidSchedulers.mainThread()) // all following functions will be on ui thread
                 .subscribe( random -> {
                     textView.setText(String.valueOf(random));
-                    buttonsClickedPublisher.onNext(1); //This is just for tallying up the clicks
+                    buttonsClickedPublisher.onNext(1); // this is just for tallying up the clicks
                 }, Timber::e));
 
-        //merge both buttons's emissions and tally the total number of clicks between them both
+        // Merge both buttons's emissions and tally the total number of clicks between them both
         rxSubs.add(buttonsClickedPublisher
-                .scan((total, nuValue) -> total + nuValue) //keep a running tally.
+                .scan((total, nuValue) -> total + nuValue) // keep a running tally.
                 .subscribe( tally -> {
                     if (tally > 3){
                         textViewExplanation.setVisibility(View.VISIBLE);

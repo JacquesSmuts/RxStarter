@@ -20,9 +20,9 @@ import java.util.concurrent.TimeUnit
 
 class ListActivity : BaseActivity() {
 
-    //normally you would want to lazy-load these
-    internal var timePublisher = PublishSubject.create<String>() //create a publisher you can publish to
-    internal var timeObservable = timePublisher.hide() //create an observer which you can NOT publish to, but you can listen from
+    // Normally you would want to lazy-load these
+    internal var timePublisher = PublishSubject.create<String>() // create a publisher you can publish to
+    internal var timeObservable = timePublisher.hide() // create an observer which you can NOT publish to, but you can listen from
     private var isTimerRunning = false
 
     private val maxNumber = 144
@@ -55,10 +55,10 @@ class ListActivity : BaseActivity() {
         }
         isTimerRunning = true
 
-        rxSubs.add(Observable.interval(7, TimeUnit.MILLISECONDS) //emit at 144 frames per second
+        rxSubs.add(Observable.interval(7, TimeUnit.MILLISECONDS) // emit 144 times per second
                 .tallyClicks()
                 .subscribeAndLogE { counter ->
-                    timePublisher.onNext(numberToString(counter)) //send the string to the publisher
+                    timePublisher.onNext(numberToString(counter)) // send the string to the publisher
                 })
     }
 
@@ -78,7 +78,9 @@ class ListActivity : BaseActivity() {
 /**
  * Normally this adapter would be extracted into its own file, but it's kept here for demonstrative purposes
  */
-internal class CounterAdapter(private val numbers: List<String>, private val timeObservable: Observable<String>, private val rxSubs: CompositeDisposable //this disposable is managed by the parent activity lifecycle.
+internal class CounterAdapter(private val numbers: List<String>,
+                              private val timeObservable: Observable<String>,
+                              private val rxSubs: CompositeDisposable // this disposable is managed by the parent activity lifecycle.
 ) : RecyclerView.Adapter<CounterAdapter.CounterViewHolder>() {
 
     override fun getItemCount(): Int {
@@ -99,7 +101,7 @@ internal class CounterAdapter(private val numbers: List<String>, private val tim
 
     internal class CounterViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
-        //This disposable is used to prevent memory leaks
+        // This disposable is used to prevent memory leaks
         private var disposable: Disposable? = null
 
         var textViewNumber: TextView
@@ -112,14 +114,12 @@ internal class CounterAdapter(private val numbers: List<String>, private val tim
 
         fun setTimerListener(timeObservable: Observable<String>, rxSubs: CompositeDisposable) {
 
-            //if the disposable already exists, that means the ViewHolder is being recycled by recyclerview
+            // if the disposable already exists, that means the ViewHolder is being recycled by recyclerview
             if (disposable != null && !disposable!!.isDisposed) {
-                //So delete it out of the list of disposables in BaseActivity and dispose of it.
+                // So delete it out of the list of disposables in BaseActivity and dispose of it.
                 rxSubs.delete(disposable!!)
                 disposable!!.dispose()
             }
-
-            //
 
             disposable = timeObservable
                     .uiThread()

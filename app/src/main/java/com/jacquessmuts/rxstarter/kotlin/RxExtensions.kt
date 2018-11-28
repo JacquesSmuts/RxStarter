@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
  * This is for custom rxJava extensions
  */
 
-//adds a standard ±300ms delay for clickableObjects
+// adds a standard ±300ms delay for clickableObjects
 fun <T> Observable<T>.filterRapidClicks() = throttleFirst(1000, TimeUnit.MILLISECONDS)
 
 //same as subscribe, except it logs errors with Timber.e() automatically

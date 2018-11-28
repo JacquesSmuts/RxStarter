@@ -29,7 +29,7 @@ public class RxBus {
     public <T> Observable<T> listen(Class<T> eventType){
         return publisher
                 .ofType(eventType)
-                .hide(); //publisher can not be accessed directly
+                .hide(); // this hides the publisher so it can not be accessed directly
     }
 
 }

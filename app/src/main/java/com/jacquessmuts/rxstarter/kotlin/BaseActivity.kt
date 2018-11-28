@@ -9,11 +9,11 @@ import io.reactivex.disposables.CompositeDisposable
  */
 abstract class BaseActivity : AppCompatActivity() {
 
-    //Add all your subscriptions as disposables to this CompositeDisposable, to avoid memory leaks
+    // Add all your subscriptions as disposables to this CompositeDisposable, to avoid memory leaks
     protected val rxSubs: CompositeDisposable by lazy { CompositeDisposable() }
 
     override fun onPause() {
-        //Clear all your subscriptions every time the activity loses focus
+        // Clear all your subscriptions every time the activity loses focus
         rxSubs.clear()
         super.onPause()
     }

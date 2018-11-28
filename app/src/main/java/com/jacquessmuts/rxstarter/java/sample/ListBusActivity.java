@@ -71,10 +71,10 @@ public class ListBusActivity extends BaseActivity {
         }
         isTimerRunning = true;
 
-        rxSubs.add(Observable.interval(7, TimeUnit.MILLISECONDS) //emit at 144 frames per second
-                .map(i -> getTime()) //get the time as a string
+        rxSubs.add(Observable.interval(7, TimeUnit.MILLISECONDS) // emit at 144 frames per second
+                .map(i -> getTime()) // get the time as a string
                 .subscribe( time -> {
-                    RxBus.getInstance().publish(time); //send the string to the eventbus
+                    RxBus.getInstance().publish(time); // send the string to the eventbus
                 }, Timber::e));
     }
 
@@ -119,7 +119,7 @@ class TimerBusAdapter extends RecyclerView.Adapter<TimerBusAdapter.TimerViewHold
 
     static class TimerViewHolder extends RecyclerView.ViewHolder {
 
-        //This disposable is used to prevent memory leaks
+        // This disposable is used to prevent memory leaks
         private Disposable disposable;
 
         static TimerViewHolder newInstance(ViewGroup parent){

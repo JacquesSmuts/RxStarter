@@ -38,7 +38,7 @@ public class LongApiCallActivity extends BaseActivity {
         textViewExplanation.setText(R.string.explanation_long_load);
 
         rxSubs.add(RxView.clicks(button)
-                .subscribe( tally -> {
+                .subscribe( any -> {
                     doApiCall();
                     textViewExplanation.setVisibility(View.VISIBLE);
                 }, Timber::e));
@@ -52,34 +52,36 @@ public class LongApiCallActivity extends BaseActivity {
         }
         apiCallOngoing = true;
 
-        //Add an observable to change the textview while the api call is loading
+        // Add an observable to change the textview while the api call is loading
         TextView textView = findViewById(R.id.textView);
         ProgressBar progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
         textView.setText("");
 
-        //intervalDisposable sets Random Text every 3 seconds, forever.
+        // intervalDisposable sets Random Text every 3 seconds, forever, unless we dispose of it
         Disposable intervalDisposable = Observable.interval(3, 3, TimeUnit.SECONDS)
-                .map(input -> getRandomNumber()) //get a random number
+                .map(input -> getRandomNumber()) // get a random number
                 .subscribe(randomNumber -> {
-                    setRandomText(randomNumber); //uses random number to choose a message. Can be replaced with method call.
+                    setRandomText(randomNumber); // uses random number to choose a message. Can be replaced with method call.
                  }, Timber::e);
 
-        //The timer will stop once rxSubs gets cleared in [BaseActivity]'s onPause method.
+        // The timer will stop once rxSubs gets cleared in [BaseActivity]'s onPause method.
         rxSubs.add(intervalDisposable);
 
-        //Notice how the method of getting the randomnumber call onto a different thread is
-        // different from the one in [FailingApiCallActivity].
-        // RxJava usually has more than one way to do the same thing
+        /*
+         * Notice how the method of getting the randomNumber call onto a different thread is
+         * different from the one in [com.jacquessmuts.rxstarter.java.sample.FailingApiCallActivity].
+         * RxJava usually has more than one way to do the same thing
+         */
         rxSubs.add(Observable.fromCallable(this::getRandomNumberSlowly)
-                .subscribeOn(Schedulers.computation())//the initial callable is put on the computation thread
-                .observeOn(AndroidSchedulers.mainThread()) //all following parts of this chain will be on UiThread
+                .subscribeOn(Schedulers.computation()) // the initial callable is put on the computation thread
+                .observeOn(AndroidSchedulers.mainThread()) // all following parts of this chain will be on UiThread
                 .subscribe( result -> {
                     finishWithMessage("SUCCESS! Result = " + result);
-                    intervalDisposable.dispose(); //stop the interval by disposing of it
+                    intervalDisposable.dispose(); // stop the interval by disposing of it
                 }, error -> {
                     Timber.e(error);
-                    intervalDisposable.dispose(); //stop the interval by disposing of it
+                    intervalDisposable.dispose(); // stop the interval by disposing of it
                 }));
 
     }
@@ -98,8 +100,7 @@ public class LongApiCallActivity extends BaseActivity {
         String[] messages = getResources().getStringArray(R.array.loading_messages);
         textView.setText(messages[number]);
     }
-
-
+    
     /**
      * Returns a random number from 1-10, after 4-40 seconds
      * Simulates an api call which keeps failing

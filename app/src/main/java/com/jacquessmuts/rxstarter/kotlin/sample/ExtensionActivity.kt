@@ -34,7 +34,7 @@ class ExtensionActivity : BaseActivity() {
         val textViewExplanation = findViewById<TextView>(R.id.textViewExplanation)
         textViewExplanation.setText(R.string.explanation_failing_api)
 
-        //this is just to show the button clicks
+        // this is just to show the button clicks
         rxSubs.add(RxView.clicks(button)
                 .map { input -> Bulge() }
                 .ofType(Bulge::class.java)
@@ -43,7 +43,7 @@ class ExtensionActivity : BaseActivity() {
                     doApiCall()
                 }, Timber::e))
 
-        //This is the same as the above function, but uses Kotlin Extension functions to be an abomination
+        // This is the same as the above function, but uses Kotlin Extension functions to be an abomination
         rxSubs.glomp(OwO.notice(button)
                 .whatsThis(Bulge::class.java)
                 .noticeOn(Schedulers.computation())
@@ -55,7 +55,7 @@ class ExtensionActivity : BaseActivity() {
 
     private fun doApiCall() {
 
-        //do an api call here
+        // do an api call here
 
     }
 

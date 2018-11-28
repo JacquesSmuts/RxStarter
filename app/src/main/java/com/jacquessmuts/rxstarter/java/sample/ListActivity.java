@@ -23,9 +23,9 @@ import timber.log.Timber;
 
 public class ListActivity extends BaseActivity {
 
-    //normally you would want to lazy-load these
-    PublishSubject<String> timePublisher = PublishSubject.create(); //create a publisher you can publish to
-    Observable<String> timeObservable = timePublisher.hide(); //create an observer which you can NOT publish to, but you can listen from
+    // normally you would want to lazy-load these
+    PublishSubject<String> textPublisher = PublishSubject.create(); // create a publisher you can publish to and subscribe to
+    Observable<String> textObservable = textPublisher.hide(); // create an observer which you can NOT publish to, but you can subscribe to
     private boolean isTimerRunning = false;
 
     @Override
@@ -44,7 +44,7 @@ public class ListActivity extends BaseActivity {
             listOfNumbers[i] = String.valueOf(i);
         }
 
-        recyclerView.setAdapter(new CounterAdapter(listOfNumbers, timeObservable, rxSubs));
+        recyclerView.setAdapter(new CounterAdapter(listOfNumbers, textObservable, rxSubs));
     }
 
     @Override
@@ -52,9 +52,7 @@ public class ListActivity extends BaseActivity {
         super.onResume();
 
         rxSubs.add(RxView.clicks(findViewById(R.id.button))
-                .subscribe( tally -> {
-                    startTimer();
-                }, Timber::e));
+                .subscribe( any -> startTimer(), Timber::e));
     }
 
     private void startTimer(){
@@ -64,20 +62,21 @@ public class ListActivity extends BaseActivity {
         }
         isTimerRunning = true;
 
-        rxSubs.add(Observable.interval(7, TimeUnit.MILLISECONDS) //emit at 144 frames per second
+        rxSubs.add(Observable.interval(7, TimeUnit.MILLISECONDS) // emit 144 times (frames) per second
                 .map(i -> 1)
                 .scan((total, nuValue) -> total + nuValue)
-                .subscribe( counter -> {
-                    timePublisher.onNext(numberToString(counter)); //send the string to the publisher
+                .subscribe( total -> {
+                    textPublisher.onNext(numberToString(total)); // send the string to the publisher
                 }, Timber::e));
     }
 
     /**
-     * This class takes an input number, and turns it into a base-144 numbering system, because
+     * This function takes an input number, and turns it into a base-144 numbering system, because
      * we expect about 144 updates per second.
-     * @param startingNumber
-     * @return
+     * @param startingNumber any number smaller than Integer.MAX_VALUE
+     * @return a String representing a base 144 counting system
      */
+
     private String numberToString(int startingNumber) {
         int number = startingNumber;
         int remainder;
@@ -99,7 +98,7 @@ class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterViewHold
 
     private String[] numbers;
     private Observable<String> timeObservable;
-    private CompositeDisposable rxSubs; //this disposable is managed by the parent activity lifecycle.
+    private CompositeDisposable rxSubs; // this disposable is managed by the parent activity lifecycle.
 
     @Override
     public int getItemCount() {
@@ -120,8 +119,6 @@ class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterViewHold
 
     @Override
     public void onBindViewHolder(@NonNull CounterViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
         holder.textViewNumber.setText(numbers[position]);
         holder.setTimerListener(timeObservable, rxSubs);
     }
@@ -129,7 +126,7 @@ class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterViewHold
 
     static class CounterViewHolder extends RecyclerView.ViewHolder {
 
-        //This disposable is used to prevent memory leaks
+        // This disposable is used along with rxSubs to prevent memory leaks
         private Disposable disposable;
 
         static CounterViewHolder newInstance(ViewGroup parent, Observable<String> timeObservable, CompositeDisposable rxSubs){
@@ -146,21 +143,26 @@ class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterViewHold
             textViewTime = v.findViewById(R.id.textViewTime);
         }
 
-        void setTimerListener(Observable<String> timeObservable, CompositeDisposable rxSubs){
+        /**
+         * This method cleans up prior observables on this viewholder and sets new ones
+         * @param textObservable the observable which will emit 144 strings per second
+         * @param rxSubs the compositedisposable managed by the parent activity's lifecycle.
+         */
+        void setTimerListener(Observable<String> textObservable, CompositeDisposable rxSubs){
 
-            //if the disposable already exists, that means the ViewHolder is being recycled by recyclerview
+            // if the disposable already exists, that means the ViewHolder is being recycled by recyclerview
             if (disposable != null && !disposable.isDisposed()){
-                //So delete it out of the list of disposables in BaseActivity and dispose of it.
+                // So delete it out of the list of disposables in BaseActivity and dispose of it.
                 rxSubs.delete(disposable);
                 disposable.dispose();
             }
 
-            //
-
-            disposable = timeObservable
+            // Now we can set a new disposable/subscription to update the textview on each emission
+            disposable = textObservable
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(textViewTime::setText, Timber::e);
 
+            // and make sure the subscription is disposed of if the activity's lifecycle requires it
             rxSubs.add(disposable);
         }
 

@@ -36,10 +36,10 @@ public class FailingApiCallActivity extends BaseActivity {
         TextView textViewExplanation = findViewById(R.id.textViewExplanation);
         textViewExplanation.setText(R.string.explanation_failing_api);
 
-        //this is just to show the button clicks
+        // This is just to show the button clicks
         rxSubs.add(RxView.clicks(button)
                 .map(input -> 1)
-                .scan((total, nuValue) -> total + nuValue) //keep a running tally.
+                .scan((total, nuValue) -> total + nuValue) // keep a running tally.
                 .subscribe( tally -> {
                     doApiCall();
                     if (tally > 1){
@@ -56,28 +56,28 @@ public class FailingApiCallActivity extends BaseActivity {
         }
         apiCallOngoing = true;
 
-        //Add an observable to change the textview while the api call is loading
+        // Add an observable to change the textview while the api call is loading
         TextView textView = findViewById(R.id.textView);
         ProgressBar progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
         textView.setText("");
 
-        //if you add the api call to an rxSub disposable, the api call's result will be ignored if the activity closes
-        rxSubs.add(Observable.just(true) //emit true, immediately
-                .observeOn(Schedulers.computation()) //put on computation thread
-                .map(input -> getRandomNumberUnreliably()) //do the slow api call which could fail
-                .observeOn(AndroidSchedulers.mainThread()) //put back on ui thread
+        // If you add the api call to an rxSub disposable, the api call's result will be ignored if the activity closes
+        rxSubs.add(Observable.just(true) // emit true, immediately
+                .observeOn(Schedulers.computation()) // put on computation thread
+                .map(input -> getRandomNumberUnreliably()) // do the slow api call which could fail
+                .observeOn(AndroidSchedulers.mainThread()) // put back on ui thread
                 .doOnError(error -> {
                     if (error instanceof TimeoutException){
-                        setRandomText(); //if there is a timeout, it will retry
+                        setRandomText(); // if there is a timeout, it will retry
                     } else {
-                        finishWithMessage(error.getLocalizedMessage()); //other errors are displayed to the user
+                        finishWithMessage(error.getLocalizedMessage()); // other errors are displayed to the user
                     }
                 })
-                .retryWhen( error -> error.flatMap(this::checkResponseType) ) //retry the api call if the error is the right type
+                .retryWhen( error -> error.flatMap(this::checkResponseType) ) // retry the api call if the error is the right type
                 .subscribe( result -> {
-                    finishWithMessage("SUCCESS! Result = " + result); //success!
-                }, Timber::e));
+                    finishWithMessage("SUCCESS! Result = " + result); // success!
+                }, Timber::e)); // This Timber log is not reached if the retryWhen() function fires first.
     }
 
     private void finishWithMessage(String message) {
@@ -122,6 +122,10 @@ public class FailingApiCallActivity extends BaseActivity {
         return (int) (Math.random() * (9) + 1);
     }
 
+    /**
+     * The retryWhen operator requires an Observable<Boolean> to return either the boolean or a
+     * throwable inside the Observable.
+     */
     Observable<Boolean> checkResponseType(Throwable response) {
         if ( response instanceof TimeoutException ) {
             return Observable.just( Boolean.TRUE );
