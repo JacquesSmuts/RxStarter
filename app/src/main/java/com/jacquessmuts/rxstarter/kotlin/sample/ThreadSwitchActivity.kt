@@ -68,7 +68,5 @@ class ThreadSwitchActivity : BaseActivity() {
                         textViewExplanation.visibility = View.VISIBLE
                     }
                 })
-
-
     }
 }

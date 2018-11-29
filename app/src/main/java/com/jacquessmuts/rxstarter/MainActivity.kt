@@ -5,7 +5,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.jacquessmuts.rxstarter.java.BaseActivity
-import com.jacquessmuts.rxstarter.java.sample.*
+import com.jacquessmuts.rxstarter.java.sample.ButtonRapidClickActivity
+import com.jacquessmuts.rxstarter.java.sample.DistinctActivity
+import com.jacquessmuts.rxstarter.java.sample.FailingApiCallActivity
+import com.jacquessmuts.rxstarter.java.sample.ListActivity
+import com.jacquessmuts.rxstarter.java.sample.ListBusActivity
+import com.jacquessmuts.rxstarter.java.sample.LongApiCallActivity
+import com.jacquessmuts.rxstarter.java.sample.PinActivity
+import com.jacquessmuts.rxstarter.java.sample.SingleActivity
+import com.jacquessmuts.rxstarter.java.sample.ThreadSwitchActivity
 import com.jacquessmuts.rxstarter.kotlin.subscribeAndLogE
 import com.jacquessmuts.rxstarter.models.ActivityIntent
 import com.jacquessmuts.rxstarter.models.getIntent
@@ -13,9 +21,7 @@ import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.content_main.*
 
-
 class MainActivity : BaseActivity() {
-
 
     companion object {
         val CLICKABLE_ACTIVITIES = listOf(
@@ -42,7 +48,7 @@ class MainActivity : BaseActivity() {
         setupAdapter()
     }
 
-    fun setupAdapter(){
+    fun setupAdapter() {
 
         adapter = ActivityAdapter(activityClickedPublisher)
         adapter.activities = getListOfClickableActivities()
@@ -72,5 +78,4 @@ class MainActivity : BaseActivity() {
 
         return intentList
     }
-
 }

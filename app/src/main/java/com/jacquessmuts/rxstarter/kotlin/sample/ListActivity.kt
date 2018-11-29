@@ -78,9 +78,10 @@ class ListActivity : BaseActivity() {
 /**
  * Normally this adapter would be extracted into its own file, but it's kept here for demonstrative purposes
  */
-internal class CounterAdapter(private val numbers: List<String>,
-                              private val timeObservable: Observable<String>,
-                              private val rxSubs: CompositeDisposable // this disposable is managed by the parent activity lifecycle.
+internal class CounterAdapter(
+    private val numbers: List<String>,
+    private val timeObservable: Observable<String>,
+    private val rxSubs: CompositeDisposable // this disposable is managed by the parent activity lifecycle.
 ) : RecyclerView.Adapter<CounterAdapter.CounterViewHolder>() {
 
     override fun getItemCount(): Int {
@@ -97,7 +98,6 @@ internal class CounterAdapter(private val numbers: List<String>,
         holder.textViewNumber.text = numbers[position]
         holder.setTimerListener(timeObservable, rxSubs)
     }
-
 
     internal class CounterViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
@@ -138,8 +138,5 @@ internal class CounterAdapter(private val numbers: List<String>,
                 return CounterViewHolder(view)
             }
         }
-
-
     }
-
 }

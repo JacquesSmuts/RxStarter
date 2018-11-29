@@ -50,21 +50,18 @@ class ExtensionActivity : BaseActivity() {
                 .nuzzle { you ->
                     doApiCall()
                 })
-
     }
 
     private fun doApiCall() {
 
         // do an api call here
-
     }
 
     fun CompositeDisposable.glomp(disposable: Disposable) = add(disposable)
 
     fun <T> Observable<T>.whatsThis(clazz: Class<T>) = ofType(clazz)
 
-
-    fun <T> Observable<T>.nuzzle(onNext: (it : T) -> Unit): Disposable =
+    fun <T> Observable<T>.nuzzle(onNext: (it: T) -> Unit): Disposable =
             subscribe({ onNext(it) }, Timber::e)
 
     object OwO {
@@ -72,10 +69,9 @@ class ExtensionActivity : BaseActivity() {
         fun notice(bulge: View): Observable<Bulge> {
             return RxView.clicks(bulge).map { Bulge() }
         }
-
     }
 
-    class Bulge(){}
+    class Bulge()
 
     fun <T> Observable<T>.noticeOn(scheduler: Scheduler) = observeOn(scheduler)
 }
