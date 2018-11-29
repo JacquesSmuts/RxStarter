@@ -2,10 +2,9 @@ version: 2
 jobs:
   build:
     working_directory: ~/code
-
     docker:
       - image: circleci/android:api-25-alpha
-      steps:
+        steps:
             - run:
                 name: Build debug APK and release APK
                 command: |
