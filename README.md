@@ -1,5 +1,5 @@
 
-[![CircleCI](https://circleci.com/gh/JacquesSmuts/RxStarter/tree/master.svg?style=svg)](https://circleci.com/gh/JacquesSmuts/RxStarter/tree/master) [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
+[![CircleCI](https://circleci.com/gh/JacquesSmuts/RxStarter/tree/master.svg?style=svg)](https://circleci.com/gh/JacquesSmuts/RxStarter/tree/master) [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/) [![codecov](https://codecov.io/gh/JacquesSmuts/RxStarter/branch/master/graph/badge.svg)](https://codecov.io/gh/JacquesSmuts/RxStarter)
 
 # RxStarter
 This is a starter project for demonstrating RxJava2
