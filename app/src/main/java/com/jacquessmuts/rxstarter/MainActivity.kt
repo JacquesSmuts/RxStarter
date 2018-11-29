@@ -13,9 +13,7 @@ import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.content_main.*
 
-
 class MainActivity : BaseActivity() {
-
 
     companion object {
         val CLICKABLE_ACTIVITIES = listOf(
@@ -42,7 +40,7 @@ class MainActivity : BaseActivity() {
         setupAdapter()
     }
 
-    fun setupAdapter(){
+    fun setupAdapter() {
 
         adapter = ActivityAdapter(activityClickedPublisher)
         adapter.activities = getListOfClickableActivities()
@@ -72,5 +70,4 @@ class MainActivity : BaseActivity() {
 
         return intentList
     }
-
 }

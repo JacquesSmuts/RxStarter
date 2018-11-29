@@ -19,12 +19,12 @@ import java.util.concurrent.TimeUnit
 // adds a standard ±300ms delay for clickableObjects
 fun <T> Observable<T>.filterRapidClicks() = throttleFirst(1000, TimeUnit.MILLISECONDS)
 
-//same as subscribe, except it logs errors with Timber.e() automatically
-//TODO: try to figure out how to make this work. Consumer not recognizing lambdas?
-fun <T> Observable<T>.subscribeAndLogE(onNext: (it : T) -> Unit): Disposable =
+// same as subscribe, except it logs errors with Timber.e() automatically
+// TODO: try to figure out how to make this work. Consumer not recognizing lambdas?
+fun <T> Observable<T>.subscribeAndLogE(onNext: (it: T) -> Unit): Disposable =
         subscribe({ onNext(it) }, Timber::e)
 
-class ErrorConsumer<T>: Consumer<T> {
+class ErrorConsumer<T> : Consumer<T> {
     override fun accept(t: T) {
         if (t is Throwable)
             Timber.e(t)
@@ -52,9 +52,7 @@ class RunningAverage : ObservableTransformer<Int, Double> {
                 ) { acc, v -> AverageAcc(acc.sum + v, acc.count + 1) }
                 .filter { acc -> acc.count > 0 }
                 .map { acc -> acc.sum / acc.count.toDouble() }
-
     }
 
     private class AverageAcc(val sum: Int, val count: Int)
-
 }

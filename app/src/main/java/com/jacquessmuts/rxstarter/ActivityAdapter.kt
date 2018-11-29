@@ -12,12 +12,11 @@ import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.viewholder_activities.view.*
 
-
 /**
  * Created by jacquessmuts on 2018/10/21
  * Adapter to display list of activities and provide intent to go to that activity
  */
-class ActivityAdapter(private val activityClickPublisher: PublishSubject<ActivityIntent<out AppCompatActivity>>): RecyclerView.Adapter<ActivityAdapter.ActivityViewHolder>() {
+class ActivityAdapter(private val activityClickPublisher: PublishSubject<ActivityIntent<out AppCompatActivity>>) : RecyclerView.Adapter<ActivityAdapter.ActivityViewHolder>() {
 
     var activities: List<ActivityIntent<out AppCompatActivity>> = listOf()
 
@@ -37,7 +36,7 @@ class ActivityAdapter(private val activityClickPublisher: PublishSubject<Activit
                 .subscribeWith(activityClickPublisher)
     }
 
-    class ActivityViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    class ActivityViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         companion object {
             fun createView(parentView: ViewGroup): View {

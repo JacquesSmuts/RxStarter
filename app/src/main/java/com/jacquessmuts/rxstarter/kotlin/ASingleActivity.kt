@@ -13,7 +13,6 @@ class ASingleActivity : AppCompatActivity() {
 
     private var singleDisposable: Disposable? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_single)
@@ -23,7 +22,7 @@ class ASingleActivity : AppCompatActivity() {
         val textView = findViewById<TextView>(R.id.textView)
 
         val fab = findViewById<FloatingActionButton>(R.id.fab)
-        fab.setOnClickListener{
+        fab.setOnClickListener {
 
             // Create a single. This is not ideal.
             Single.just(getAGreeting())
@@ -42,9 +41,7 @@ class ASingleActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-
     private fun getAGreeting(): String {
         return "Hello ~World~ GDG"
     }
-
 }

@@ -35,6 +35,5 @@ class ButtonRapidClickActivity : BaseActivity() {
                         textViewExplanation.visibility = View.VISIBLE
                     }
                 })
-
     }
 }

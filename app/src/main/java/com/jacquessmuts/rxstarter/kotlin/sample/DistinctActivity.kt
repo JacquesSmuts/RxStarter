@@ -39,7 +39,6 @@ class DistinctActivity : BaseActivity() {
                     getDistinctValues()
                     textViewExplanation.visibility = View.VISIBLE
                 })
-
     }
 
     private fun getDistinctValues() {
@@ -55,7 +54,6 @@ class DistinctActivity : BaseActivity() {
         progressBar.visibility = View.VISIBLE
         textView.text = ""
 
-
         rxSubs.add(Observable.interval(200, 200, TimeUnit.MILLISECONDS)
                 .backgroundThread() // all following parts of this chain will be on computation thread
                 .map { input -> randomNumber }
@@ -64,7 +62,5 @@ class DistinctActivity : BaseActivity() {
                 .subscribeAndLogE { result ->
                     textView.append(result!!.toString() + " ") // append value to textview
                 })
-
     }
-
 }
