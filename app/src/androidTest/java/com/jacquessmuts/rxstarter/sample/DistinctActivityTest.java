@@ -6,11 +6,7 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
-import android.widget.TextView;
 import com.jacquessmuts.rxstarter.R;
-import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +16,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.jacquessmuts.rxstarter.EspressoUtils.isTextLength;
 import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
@@ -52,19 +49,5 @@ public class DistinctActivityTest {
         textView.check(matches(isTextLength(2, 12)));
     }
 
-    public static TypeSafeMatcher<View> isTextLength(final int minLength, final int maxLength) {
-        return new TypeSafeMatcher<View>() {
-            @Override
-            protected boolean matchesSafely(View item) {
-                int length = ((TextView) item).getText().length();
-                return (length <= maxLength && length >= minLength);
-            }
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("isTextLength");
-            }
-        };
-    }
 }
 
