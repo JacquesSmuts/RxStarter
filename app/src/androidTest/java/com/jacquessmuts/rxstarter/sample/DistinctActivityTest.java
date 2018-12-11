@@ -46,10 +46,10 @@ public class DistinctActivityTest {
         }
 
         textView.check(matches(isDisplayed()));
-        textView.check(matches(isTextLength(2, 9)));
+        textView.check(matches(isTextLength(2, 12)));
 
         appCompatButton.perform(click());
-        textView.check(matches(isTextLength(2, 9)));
+        textView.check(matches(isTextLength(2, 12)));
     }
 
     public static TypeSafeMatcher<View> isTextLength(final int minLength, final int maxLength) {
