@@ -1,4 +1,4 @@
-package com.jacquessmuts.rxstarter
+package com.jacquessmuts.rxstarter.sample
 
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.click
@@ -10,6 +10,8 @@ import android.support.test.filters.LargeTest
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.jacquessmuts.rxstarter.EspressoUtils.childAtPosition
+import com.jacquessmuts.rxstarter.MainActivity
+import com.jacquessmuts.rxstarter.R
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsString
 import org.junit.Rule

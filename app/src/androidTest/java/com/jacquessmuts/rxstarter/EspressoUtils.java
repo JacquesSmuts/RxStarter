@@ -11,9 +11,9 @@ import org.hamcrest.TypeSafeMatcher;
  * Created by jacquessmuts on 2018/12/08
  * TODO: Add a class header comment!
  */
-class EspressoUtils {
+public class EspressoUtils {
 
-    static Matcher<View> childAtPosition(
+    public static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
 
         return new TypeSafeMatcher<View>() {
