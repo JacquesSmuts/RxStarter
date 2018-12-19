@@ -1,8 +1,9 @@
-apply plugin: 'com.android.application'
-
-apply plugin: 'kotlin-android'
-
-apply plugin: 'kotlin-android-extensions'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'com.github.triplet.play' version '2.0.0'
+}
 
 android {
     compileSdkVersion 28
@@ -24,6 +25,13 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+}
+
+// Deployment
+play {
+    track = 'alpha'
+    serviceAccountCredentials = file("rxstarter_pk.json")
+    defaultToAppBundles = true
 }
 
 ext {
@@ -56,4 +64,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
+
 }
