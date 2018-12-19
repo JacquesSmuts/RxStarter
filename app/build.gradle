@@ -11,14 +11,25 @@ android {
         applicationId "com.jacquessmuts.rxstarter"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 2
-        versionName "1.1"
+        versionCode 3
+        versionName "1.1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        release {
+            Properties properties = new Properties()
+            properties.load(project.rootProject.file('local.properties').newDataInputStream())
+            storeFile file("../keystore")
+            keyAlias properties.getProperty('keyAlias')
+            storePassword properties.getProperty('storePassword')
+            keyPassword properties.getProperty('keyPassword')
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -29,8 +40,8 @@ android {
 
 // Deployment
 play {
-    track = 'alpha'
-    serviceAccountCredentials = file("rxstarter_pk.json")
+    track = 'beta'
+    serviceAccountCredentials = file("../rxstarter_pk.json")
     defaultToAppBundles = true
 }
 
