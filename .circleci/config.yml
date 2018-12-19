@@ -16,6 +16,9 @@ jobs:
       - run: echo $ENCODED_KEYSTORE | base64 --decode >> ${HOME}/keystore
       - run: echo 'export KEYSTORE=${HOME}/keystore' >> $BASH_ENV
       - run:
+          name: Store Google Service Account
+          command: echo $DEPLOYMENT_PRIVATE_KEY > ${HOME}/rxstarter_pk.json
+      - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
       - save_cache:
