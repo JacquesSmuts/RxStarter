@@ -62,6 +62,5 @@ class SingleActivityTest {
         floatingActionButton.perform(click())
 
         textView.check(matches(withText(containsString("Hello World"))))
-
     }
 }
