@@ -39,7 +39,7 @@ android {
 // Deployment
 play {
     track = 'beta'
-    serviceAccountCredentials = file(System.getenv("DEPLOYMENT_PRIVATE_KEY") ?: "rxstarter_pk.json")
+    serviceAccountCredentials = file(System.getenv("PRIVATE_KEY") ?: "rxstarter_pk.json")
     defaultToAppBundles = true
     resolutionStrategy = "ignore"
 }

@@ -16,7 +16,7 @@ jobs:
       - run: echo $ENCODED_KEYSTORE | base64 --decode >> ${HOME}/keystore
       - run: echo 'export KEYSTORE=${HOME}/keystore' >> $BASH_ENV
       - run: echo $DEPLOYMENT_PRIVATE_KEY | base64 --decode >> ${HOME}/rxstarter_pk.json
-      - run: echo 'export JSON=${HOME}/rxstarter_pk.json' >> $BASH_ENV
+      - run: echo 'export PRIVATE_KEY=${HOME}/rxstarter_pk.json' >> $BASH_ENV
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
