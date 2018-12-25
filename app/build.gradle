@@ -42,10 +42,33 @@ static def getVersionCode() {
 
 // Deployment
 play {
-    track = 'beta'
+    track = getDeploymentTrack()
     serviceAccountCredentials = file(System.getenv("PRIVATE_KEY") ?: "rxstarter_pk.json")
     defaultToAppBundles = true
     resolutionStrategy = "ignore"
+    println("DEPLOYMENT TRACK: " + track)
+}
+
+// The deployment track is based on the branch.
+static def getDeploymentTrack() {
+    def branch = gitBranch()
+    println("BRANCH: " + branch)
+    if (branch.equals("master")) {
+        return "beta"
+    }
+    if (branch.contains("release/")) {
+        return "alpha"
+    }
+    return "internal"
+}
+
+static def gitBranch() {
+    def branch = ""
+    def proc = "git rev-parse --abbrev-ref HEAD".execute()
+    proc.in.eachLine { line -> branch = line }
+    proc.err.eachLine { line -> println line }
+    proc.waitFor()
+    branch
 }
 
 ext {
