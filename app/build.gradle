@@ -37,7 +37,9 @@ android {
 }
 
 static def getVersionCode() {
-    return 1 + System.getenv("CIRCLE_BUILD_NUM")
+    def buildNumber = 1 + System.getenv("CIRCLE_BUILD_NUM")
+    println("BUILD: " + buildNumber)
+    return buildNumber
 }
 
 // Deployment
