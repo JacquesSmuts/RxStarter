@@ -46,20 +46,19 @@ play {
     serviceAccountCredentials = file(System.getenv("PRIVATE_KEY") ?: "rxstarter_pk.json")
     defaultToAppBundles = true
     resolutionStrategy = "ignore"
-    println("DEPLOYMENT TRACK: " + track)
 }
 
 // The deployment track is based on the branch.
 static def getDeploymentTrack() {
     def branch = gitBranch()
-    println("BRANCH: " + branch)
+    def track = 'internal'
     if (branch.equals("master")) {
-        return "beta"
+        track = "beta"
+    } else if (branch.equals("release")) {
+        track = "alpha"
     }
-    if (branch.contains("release/")) {
-        return "alpha"
-    }
-    return "internal"
+    println("DEPLOYMENT TRACK: " + track)
+    return track
 }
 
 static def gitBranch() {
@@ -68,6 +67,7 @@ static def gitBranch() {
     proc.in.eachLine { line -> branch = line }
     proc.err.eachLine { line -> println line }
     proc.waitFor()
+    println("BRANCH: " + branch)
     branch
 }
 
