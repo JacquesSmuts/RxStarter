@@ -78,10 +78,13 @@ workflows:
   build-and-deploy:
     jobs:
       - build
-      - tests
+      - tests:
+        requires:
+          - build
       - deploy:
           requires:
             - build
+            - tests
           filters:
             branches:
               only:
