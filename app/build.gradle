@@ -36,13 +36,15 @@ android {
     }
 }
 
+// Don't name this getVersionCode() or things will break
 static def getBuildVersion() {
-    def buildNumber = 1
-    if (System.getenv("CIRCLE_BUILD_NUM") != null) {
-        buildNumber += System.getenv("CIRCLE_BUILD_NUM")
+    def version = 1
+    def buildNumber = System.getenv("CIRCLE_BUILD_NUM")
+    if (buildNumber != null) {
+        version += buildNumber
     }
-    println("VersionCode: " + buildNumber)
-    return buildNumber
+    println("VersionCode: " + version)
+    return version
 }
 
 // Deployment
