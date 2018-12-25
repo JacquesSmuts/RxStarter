@@ -73,14 +73,15 @@ jobs:
         name: Upload to Google Play
         command: ./gradlew publishRelease
 
+
 workflows:
   version: 2
   build-and-deploy:
     jobs:
       - build
       - tests:
-        requires:
-          - build
+          requires:
+            - build
       - deploy:
           requires:
             - build
