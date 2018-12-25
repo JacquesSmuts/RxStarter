@@ -11,7 +11,7 @@ android {
         applicationId "com.jacquessmuts.rxstarter"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode getVersionCode()
+        versionCode getBuildVersion() as int
         versionName "1.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -36,7 +36,7 @@ android {
     }
 }
 
-static def getVersionCode() {
+static def getBuildVersion() {
     def buildNumber = 1
     if (System.getenv("CIRCLE_BUILD_NUM") != null) {
         buildNumber += System.getenv("CIRCLE_BUILD_NUM")
@@ -63,7 +63,6 @@ static def getDeploymentTrack() {
         track = "alpha"
     }
     println("DEPLOYMENT TRACK: " + track)
-    getVersionCode()
     return track
 }
 
