@@ -64,8 +64,8 @@ jobs:
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
-        name: Upload to Google Play
-        command: ./gradlew publishRelease
+          name: Upload to Google Play
+          command: ./gradlew publishRelease
 
 workflows:
   version: 2
