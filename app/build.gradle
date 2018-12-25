@@ -37,8 +37,11 @@ android {
 }
 
 static def getVersionCode() {
-    def buildNumber = 1 + System.getenv("CIRCLE_BUILD_NUM")
-    println("BUILD: " + buildNumber)
+    def buildNumber = 1
+    if (System.getenv("CIRCLE_BUILD_NUM") != null) {
+        buildNumber += System.getenv("CIRCLE_BUILD_NUM")
+    }
+    println("VersionCode: " + buildNumber)
     return buildNumber
 }
 
@@ -60,6 +63,7 @@ static def getDeploymentTrack() {
         track = "alpha"
     }
     println("DEPLOYMENT TRACK: " + track)
+    getVersionCode()
     return track
 }
 
