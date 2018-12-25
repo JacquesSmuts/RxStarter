@@ -13,10 +13,16 @@ jobs:
 #      - run:
 #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
 #         command: sudo chmod +x ./gradlew
-      - run: echo $ENCODED_KEYSTORE | base64 --decode >> ${HOME}/keystore
-      - run: echo 'export KEYSTORE=${HOME}/keystore' >> $BASH_ENV
-      - run: echo $DEPLOYMENT_PRIVATE_KEY | base64 --decode >> ${HOME}/rxstarter_pk.json
-      - run: echo 'export PRIVATE_KEY=${HOME}/rxstarter_pk.json' >> $BASH_ENV
+      - run:
+          name: Decode and store Keystore
+          command:
+            - echo $ENCODED_KEYSTORE | base64 --decode >> ${HOME}/keystore
+            - echo 'export KEYSTORE=${HOME}/keystore' >> $BASH_ENV
+      - run:
+          name: Decode and store Deployment Private Key
+          command:
+            - echo $DEPLOYMENT_PRIVATE_KEY | base64 --decode >> ${HOME}/rxstarter_pk.json
+            - echo 'export PRIVATE_KEY=${HOME}/rxstarter_pk.json' >> $BASH_ENV
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
@@ -24,23 +30,61 @@ jobs:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-      - run:
-          name: Run KtLint
-          command: ./gradlew ktlint
-      - store_artifacts:
-          path: app/build/reports
-          destination: reports
-      - run:
-          name: Run Lint Test
-          command: ./gradlew lintDebug
-      - run:
-          name: Run Tests
-          command: ./gradlew lint test
-      - store_artifacts:
-          path: app/build/reports
-          destination: reports
-      - store_test_results:
-          path: app/build/test-results
-      - run:
+
+  tests:
+    working_directory: ~/code
+    docker:
+      - image: circleci/android:api-25-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+    - run:
+      name: Run KtLint
+            command: ./gradlew ktlint
+    - store_artifacts:
+        path: app/build/reports
+        destination: reports
+    - run:
+        name: Run Lint Test
+        command: ./gradlew lintDebug
+    - run:
+        name: Run Tests
+        command: ./gradlew lint test
+    - store_artifacts:
+        path: app/build/reports
+        destination: reports
+    - store_test_results:
+        path: app/build/test-results
+
+  deploy:
+   working_directory: ~/code
+      docker:
+        - image: circleci/android:api-25-alpha
+      environment:
+        JVM_OPTS: -Xmx3200m
+      steps:
+        - checkout
+        - restore_cache:
+            key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+        - run:
           name: Upload to Google Play
           command: ./gradlew publishRelease
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - tests
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+              - develop
+              - master
+              - feature/build_by_branch
