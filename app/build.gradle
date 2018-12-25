@@ -11,8 +11,8 @@ android {
         applicationId "com.jacquessmuts.rxstarter"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 4
-        versionName "1.1.1"
+        versionCode getVersionCode()
+        versionName "1.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
@@ -34,6 +34,10 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+}
+
+static def getVersionCode() {
+    return 1 + System.getenv("CIRCLE_BUILD_NUM")
 }
 
 // Deployment
