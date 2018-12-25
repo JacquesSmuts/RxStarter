@@ -11,8 +11,8 @@ android {
         applicationId "com.jacquessmuts.rxstarter"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 4
-        versionName "1.1.1"
+        versionCode getBuildVersion() as int
+        versionName "1.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
@@ -36,12 +36,46 @@ android {
     }
 }
 
+// Don't name this getVersionCode() or things will break
+static def getBuildVersion() {
+    def version = 1
+    def buildNumber = System.getenv("CIRCLE_BUILD_NUM")
+    if (buildNumber != null) {
+        version += buildNumber
+    }
+    println("VersionCode: " + version)
+    return version
+}
+
 // Deployment
 play {
-    track = 'beta'
+    track = getDeploymentTrack()
     serviceAccountCredentials = file(System.getenv("PRIVATE_KEY") ?: "rxstarter_pk.json")
     defaultToAppBundles = true
     resolutionStrategy = "ignore"
+}
+
+// The deployment track is based on the branch.
+static def getDeploymentTrack() {
+    def branch = gitBranch()
+    def track = 'internal'
+    if (branch.equals("master")) {
+        track = "beta"
+    } else if (branch.equals("release")) {
+        track = "alpha"
+    }
+    println("DEPLOYMENT TRACK: " + track)
+    return track
+}
+
+static def gitBranch() {
+    def branch = ""
+    def proc = "git rev-parse --abbrev-ref HEAD".execute()
+    proc.in.eachLine { line -> branch = line }
+    proc.err.eachLine { line -> println line }
+    proc.waitFor()
+    println("BRANCH: " + branch)
+    branch
 }
 
 ext {
