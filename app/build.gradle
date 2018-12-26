@@ -1,8 +1,9 @@
-apply plugin: 'com.android.application'
-
-apply plugin: 'kotlin-android'
-
-apply plugin: 'kotlin-android-extensions'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'com.github.triplet.play' version '2.0.0'
+}
 
 android {
     compileSdkVersion 28
@@ -10,20 +11,76 @@ android {
         applicationId "com.jacquessmuts.rxstarter"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 2
-        versionName "1.1"
+        versionCode getBuildVersion() as int
+        versionName "1.1.2"
+        flavorDimensions "default"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        release {
+            storeFile file(System.getenv("KEYSTORE") ?: "keystore.jks")
+            storePassword System.getenv("KEYSTORE_PASSWORD")
+            keyAlias System.getenv("KEYSTORE_ALIAS")
+            keyPassword System.getenv("KEYSTORE_PASSWORD")
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
+    }
+    productFlavors {
+        staging {} // This is just here for demonstrative purposes for [config.yml]
+        production {}
     }
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+}
+
+// Don't name this getVersionCode() or things will break
+static def getBuildVersion() {
+    def version = 1
+    def buildNumber = System.getenv("CIRCLE_BUILD_NUM")
+    if (buildNumber != null) {
+        version += buildNumber
+    }
+    println("VersionCode: " + version)
+    return version
+}
+
+// Deployment
+play {
+    track = getDeploymentTrack()
+    serviceAccountCredentials = file(System.getenv("PRIVATE_KEY") ?: "rxstarter_pk.json")
+    defaultToAppBundles = true
+    resolutionStrategy = "ignore"
+}
+
+// The deployment track is based on the branch.
+static def getDeploymentTrack() {
+    def branch = gitBranch()
+    def track = 'internal'
+    if (branch.equals("master")) {
+        track = "beta"
+    } else if (branch.equals("release")) {
+        track = "alpha"
+    }
+    println("DEPLOYMENT TRACK: " + track)
+    return track
+}
+
+static def gitBranch() {
+    def branch = ""
+    def proc = "git rev-parse --abbrev-ref HEAD".execute()
+    proc.in.eachLine { line -> branch = line }
+    proc.err.eachLine { line -> println line }
+    proc.waitFor()
+    println("BRANCH: " + branch)
+    branch
 }
 
 ext {
@@ -49,8 +106,13 @@ dependencies {
     implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.1.1'
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.0'
 
+    // Testing
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.21.0'
+    androidTestImplementation 'org.mockito:mockito-android:2.21.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
+}
+
 }

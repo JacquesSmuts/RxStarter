@@ -28,6 +28,7 @@
         tools:showIn="@layout/activity_button_click">
 
         <TextView
+            android:id="@+id/textViewHeader"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Match your previous pin to win"

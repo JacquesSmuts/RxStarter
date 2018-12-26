@@ -4,7 +4,11 @@
 # RxStarter
 This is a starter project for demonstrating RxJava2
 
-You can download this app on the play store [here](https://play.google.com/store/apps/details?id=com.jacquessmuts.rxstarter)
+<p align="center">
+  <a href="https://play.google.com/store/apps/details?id=com.jacquessmuts.rxstarter" target="_blank">
+    <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="320" />
+  </a>
+</p>
 
 ## Getting into RxJava
 
