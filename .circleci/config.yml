@@ -111,7 +111,7 @@ workflows:
             branches:
               only:
               - master
-      - deploy_live:
+      - deploy_staging:
           requires:
             - build
             - tests
