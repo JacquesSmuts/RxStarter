@@ -13,6 +13,7 @@ android {
         targetSdkVersion 28
         versionCode getBuildVersion() as int
         versionName "1.1.2"
+        flavorDimensions "default"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
@@ -29,6 +30,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
+    }
+    productFlavors {
+        staging {} // This is just here for demonstrative purposes for [config.yml]
+        production {}
     }
     compileOptions {
         targetCompatibility 1.8
