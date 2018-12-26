@@ -36,7 +36,7 @@ jobs:
           destination: reports
       - run:
           name: Run Lint Test
-          command: ./gradlew lint
+          command: ./gradlew lintStagingDebug
       - run:
           name: Run Tests
           command: ./gradlew lint test
