@@ -10,9 +10,6 @@ jobs:
       - checkout
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-#      - run:
-#         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
-#         command: sudo chmod +x ./gradlew
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
@@ -64,8 +61,11 @@ jobs:
           command: |
             echo $ENCODED_KEYSTORE | base64 --decode >> ${HOME}/keystore
             echo 'export KEYSTORE=${HOME}/keystore' >> $BASH_ENV
-      - run: echo $DEPLOYMENT_PRIVATE_KEY | base64 --decode >> ${HOME}/rxstarter_pk.json
-      - run: echo 'export PRIVATE_KEY=${HOME}/rxstarter_pk.json' >> $BASH_ENV
+      - run:
+          name: Decode and store Keystore
+          command: |
+            echo $DEPLOYMENT_PRIVATE_KEY | base64 --decode >> ${HOME}/rxstarter_pk.json
+            echo 'export PRIVATE_KEY=${HOME}/rxstarter_pk.json' >> $BASH_ENV
       - run:
           name: Upload to Google Play
           command: ./gradlew publishRelease
@@ -87,4 +87,3 @@ workflows:
               only:
               - develop
               - master
-              - feature/build_by_branch
