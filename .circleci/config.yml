@@ -87,3 +87,4 @@ workflows:
               only:
               - develop
               - master
+              - feature/build_by_branch
