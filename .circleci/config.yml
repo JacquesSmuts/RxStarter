@@ -62,25 +62,21 @@ jobs:
             ./gradlew :app:assembleDebug
             ./gradlew :app:assembleDebugAndroidTest
       - run:
-          name: Store Google Service Account
-          command: echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
+          name: Dump Google Cloud Credentials to file
+          command: echo $DEPLOYMENT_PRIVATE_KEY | base64 --decode >> ${HOME}/gcp-key.json
+      - run: gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
+      - run: gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
       - run:
-          name: Authorize gcloud and set config defaults
+          name: Configure environment
           command: |
-            echo $GCLOUD_SERVICE_KEY | base64 --decode | sudo gcloud auth activate-service-account --key-file=-
-            sudo gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            echo 'export APK_PATH=`find . -path "*.apk" ! -path "*unaligned.apk" ! -path "*Test*.apk" -print -quit`' >> $BASH_ENV
+            echo 'export TEST_APK_PATH=`find "." "-path" "*Test*.apk" -print -quit`' >> $BASH_ENV
       - run:
-          name: Test with Firebase Test Lab
-          command: >
-            sudo gcloud firebase test android run
-              --app <local_server_path>/<app_apk>.apk
-              --test <local_server_path>/<app_test_apk>.apk
-              --results-bucket cloud-test-${GOOGLE_PROJECT_ID}
-      - run:
-          name: Install gsutil dependency and copy test results data
-          command: |
-            sudo pip install -U crcmod
-            sudo gsutil -m cp -r -U `sudo gsutil ls gs://[BUCKET_NAME]/[OBJECT_NAME] | tail -1` ${CIRCLE_ARTIFACTS}/ | true
+          name: Run UI Tests
+          command: gcloud firebase test android run --type instrumentation --app ${APK_PATH} --test ${TEST_APK_PATH} --device model=Nexus6P,version=27,locale=en,orientation=portrait --timeout 30m
+          no_output_timeout: 30m
+      - store_test_results:
+          path: app/build/test-results
 
   deploy_live:
     working_directory: ~/code
@@ -98,7 +94,7 @@ jobs:
             echo $ENCODED_KEYSTORE | base64 --decode >> ${HOME}/keystore
             echo 'export KEYSTORE=${HOME}/keystore' >> $BASH_ENV
       - run:
-          name: Decode and store Keystore
+          name: Decode and store Private Key
           command: |
             echo $DEPLOYMENT_PRIVATE_KEY | base64 --decode >> ${HOME}/rxstarter_pk.json
             echo 'export PRIVATE_KEY=${HOME}/rxstarter_pk.json' >> $BASH_ENV
@@ -141,6 +137,12 @@ workflows:
       - espresso_tests:
           requires:
             - build
+          filters:
+            branches:
+              only:
+              - master
+              - develop
+              - maintenance/espresso_tests
       - deploy_live:
           requires:
             - tests
@@ -157,4 +159,3 @@ workflows:
             branches:
               only:
               - develop
-              - release
