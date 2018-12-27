@@ -60,7 +60,7 @@ jobs:
           name: Build debug APK and release APK
           command: |
             ./gradlew :app:assembleDebug
-            ./gradlew :app:assembleDebugAndroidTest
+            ./gradlew :app:assembleAndroidTest
       - run:
           name: Dump Google Cloud Credentials to file
           command: echo $DEPLOYMENT_PRIVATE_KEY | base64 --decode >> ${HOME}/gcp-key.json
