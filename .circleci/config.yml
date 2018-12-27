@@ -63,7 +63,7 @@ jobs:
             ./gradlew :app:assembleAndroidTest
       - run:
           name: Dump Google Cloud Credentials to file
-          command: echo $DEPLOYMENT_PRIVATE_KEY | base64 --decode >> ${HOME}/gcp-key.json
+          command: echo ${TEST_CLOUD_KEY} > ${HOME}/gcp-key.json
       - run: gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
       - run: gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
       - run:
