@@ -46,6 +46,39 @@ jobs:
       - store_test_results:
           path: app/build/test-results
 
+  espresso_tests:
+    working_directory: ~/code
+    docker:
+      - image: circleci/android:api-25-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Build debug APK and release APK
+          command: |
+            ./gradlew :app:assembleDebug
+            ./gradlew :app:assembleAndroidTest
+      - run:
+          name: Set up Google Cloud API calls
+          command: |
+            echo ${TEST_CLOUD_KEY} > ${HOME}/gcp-key.json
+            gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+      - run:
+          name: Configure environment
+          command: |
+            echo 'export APK_PATH=`find . -path "*.apk" ! -path "*unaligned.apk" ! -path "*Test*.apk" -print -quit`' >> $BASH_ENV
+            echo 'export TEST_APK_PATH=`find "." "-path" "*Test*.apk" -print -quit`' >> $BASH_ENV
+      - run:
+          name: Run UI Tests
+          command: gcloud firebase test android run --type instrumentation --app ${APK_PATH} --test ${TEST_APK_PATH} --device model=Nexus6P,version=27,locale=en,orientation=portrait --timeout 30m
+          no_output_timeout: 30m
+      - store_test_results:
+          path: app/build/test-results
+
   deploy_live:
     working_directory: ~/code
     docker:
@@ -62,7 +95,7 @@ jobs:
             echo $ENCODED_KEYSTORE | base64 --decode >> ${HOME}/keystore
             echo 'export KEYSTORE=${HOME}/keystore' >> $BASH_ENV
       - run:
-          name: Decode and store Keystore
+          name: Decode and store Private Key
           command: |
             echo $DEPLOYMENT_PRIVATE_KEY | base64 --decode >> ${HOME}/rxstarter_pk.json
             echo 'export PRIVATE_KEY=${HOME}/rxstarter_pk.json' >> $BASH_ENV
@@ -102,20 +135,27 @@ workflows:
       - tests:
           requires:
             - build
-      - deploy_live:
+      - espresso_tests:
           requires:
             - build
+          filters:
+            branches:
+              only:
+              - master
+              - develop
+      - deploy_live:
+          requires:
             - tests
+            - espresso_tests
           filters:
             branches:
               only:
               - master
       - deploy_staging:
           requires:
-            - build
             - tests
+            - espresso_tests
           filters:
             branches:
               only:
               - develop
-              - release
