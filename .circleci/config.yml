@@ -143,7 +143,6 @@ workflows:
               only:
               - master
               - develop
-              - maintenance/espresso_tests
       - deploy_live:
           requires:
             - tests
