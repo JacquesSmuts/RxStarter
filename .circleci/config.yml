@@ -62,10 +62,11 @@ jobs:
             ./gradlew :app:assembleDebug
             ./gradlew :app:assembleAndroidTest
       - run:
-          name: Dump Google Cloud Credentials to file
-          command: echo ${TEST_CLOUD_KEY} > ${HOME}/gcp-key.json
-      - run: gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
-      - run: gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+          name: Set up Google Cloud API calls
+          command: |
+            echo ${TEST_CLOUD_KEY} > ${HOME}/gcp-key.json
+            gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
       - run:
           name: Configure environment
           command: |
