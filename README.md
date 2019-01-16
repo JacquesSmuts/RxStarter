@@ -2,7 +2,7 @@
 [![CircleCI](https://circleci.com/gh/JacquesSmuts/RxStarter/tree/master.svg?style=svg)](https://circleci.com/gh/JacquesSmuts/RxStarter/tree/master) [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 
 # RxStarter
-This is a starter project for demonstrating RxJava2
+This is a starter project for demonstrating RxJava2. I gave a presentation on this repo, [available on YouTube](https://www.youtube.com/watch?v=TdO8hR2QAUs).
 
 <p align="center">
   <a href="https://play.google.com/store/apps/details?id=com.jacquessmuts.rxstarter" target="_blank">
